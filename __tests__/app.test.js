@@ -28,5 +28,13 @@ describe("/api", () => {
                     });
             });
         });
+        test("status 404 - not a route/path ", () => {
+            return request(app)
+                .get("/get/badroute")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid url");
+                });
+        });
     });
 });
