@@ -122,21 +122,19 @@ describe("/api", () => {
                         expect(body.message).toBe("missing input");
                     });
             });
-            test("status 406 - incorrect data type used to increment  ", () => {
+            test("status 400 - incorrect data type used to increment  ", () => {
                 const update = { inc_votes: "string" };
-                return db
-                    .request(app)
+                return request(app)
                     .patch("/api/articles/1")
                     .send(update)
-                    .expect(406)
+                    .expect(400)
                     .then(({ body }) => {
-                        expect(body.message).toBe("invalid input");
+                        expect(body.message).toBe("invalid request");
                     });
             });
-            test("status 406 - mis-spelt key on patch object  ", () => {
+            test.only("status 406 - mis-spelt key on patch object  ", () => {
                 const update = { incvote: 10 };
-                return db
-                    .request(app)
+                return request(app)
                     .patch("/api/articles/1")
                     .send(update)
                     .expect(406)
