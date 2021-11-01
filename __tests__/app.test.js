@@ -93,6 +93,25 @@ describe("/api", () => {
                         });
                     });
             });
+            test("status 201 - decrements votes correctly and returns updated article ", () => {
+                const update = { inc_votes: -10 };
+                return request(app)
+                    .patch("/api/articles/1")
+                    .send(update)
+                    .expect(201)
+                    .then(({ body }) => {
+                        const { article } = body;
+                        expect(article).toMatchObject({
+                            article_id: 1,
+                            title: "Living in the shadow of a great man",
+                            topic: "mitch",
+                            author: "butter_bridge",
+                            body: "I find this existence challenging",
+                            created_at: expect.any(String),
+                            votes: 90,
+                        });
+                    });
+            });
         });
     });
 });
