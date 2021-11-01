@@ -37,7 +37,7 @@ describe("/api", () => {
                 });
         });
         describe("/api/articles/:article_id", () => {
-            test.only("status 400 - returns articles object correctly based on id ", () => {
+            test("status 400 - returns articles object correctly based on id ", () => {
                 return request(app)
                     .get("/api/articles/1")
                     .expect(200)
@@ -54,6 +54,14 @@ describe("/api", () => {
                             votes: 100,
                             comment_count: "11",
                         });
+                    });
+            });
+            test("status 400 - requests id that doesnt exist", () => {
+                return request(app)
+                    .get("/api/articles/2000")
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body).toEqual({ message: "invalid request" });
                     });
             });
         });
