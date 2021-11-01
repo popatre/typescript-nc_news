@@ -112,6 +112,38 @@ describe("/api", () => {
                         });
                     });
             });
+            test("status 406 - missing data from patch object  ", () => {
+                const update = { inc_votes: "" };
+                return request(app)
+                    .patch("/api/articles/1")
+                    .send(update)
+                    .expect(406)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("missing input");
+                    });
+            });
+            test("status 406 - incorrect data type used to increment  ", () => {
+                const update = { inc_votes: "string" };
+                return db
+                    .request(app)
+                    .patch("/api/articles/1")
+                    .send(update)
+                    .expect(406)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("invalid input");
+                    });
+            });
+            test("status 406 - mis-spelt key on patch object  ", () => {
+                const update = { incvote: 10 };
+                return db
+                    .request(app)
+                    .patch("/api/articles/1")
+                    .send(update)
+                    .expect(406)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("invalid input");
+                    });
+            });
         });
     });
 });
