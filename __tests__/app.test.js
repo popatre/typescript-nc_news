@@ -56,9 +56,17 @@ describe("/api", () => {
                         });
                     });
             });
-            test("status 400 - requests id that doesnt exist", () => {
+            test("status 400 - requests id that doesnt exist with number parameter", () => {
                 return request(app)
                     .get("/api/articles/2000")
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body).toEqual({ message: "invalid request" });
+                    });
+            });
+            test("status 400 - requests id that doesnt exist with string parameter/wrong data type", () => {
+                return request(app)
+                    .get("/api/articles/doesntexist")
                     .expect(400)
                     .then(({ body }) => {
                         expect(body).toEqual({ message: "invalid request" });
