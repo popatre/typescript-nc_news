@@ -119,7 +119,7 @@ describe("/api", () => {
                     .send(update)
                     .expect(406)
                     .then(({ body }) => {
-                        expect(body.message).toBe("missing input");
+                        expect(body.message).toBe("invalid input");
                     });
             });
             test("status 400 - incorrect data type used to increment  ", () => {
@@ -132,7 +132,7 @@ describe("/api", () => {
                         expect(body.message).toBe("invalid request");
                     });
             });
-            test.only("status 406 - mis-spelt key on patch object  ", () => {
+            test("status 406 - mis-spelt key on patch object  ", () => {
                 const update = { incvote: 10 };
                 return request(app)
                     .patch("/api/articles/1")

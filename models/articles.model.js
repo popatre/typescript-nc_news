@@ -18,8 +18,8 @@ exports.fetchArticleById = async (id) => {
 };
 
 exports.incrementVotesById = async (id, increment) => {
-    if (increment.length === 0) {
-        return Promise.reject({ status: 406, msg: "missing input" });
+    if (increment === undefined || increment.length === 0) {
+        return Promise.reject({ status: 406, msg: "invalid input" });
     }
 
     const { rows } = await db.query(
