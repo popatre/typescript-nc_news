@@ -159,9 +159,9 @@ describe("/api", () => {
                 .get("/api/articles")
                 .expect(200)
                 .then(({ body }) => {
-                    expect(body).toBeInstanceOf(Array);
-                    expect(body).toHaveLength(12);
-                    body.forEach((article) => {
+                    expect(body.articles).toBeInstanceOf(Array);
+                    expect(body.articles).toHaveLength(12);
+                    body.articles.forEach((article) => {
                         expect(article).toMatchObject({
                             author: expect.any(String),
                             title: expect.any(String),
@@ -174,5 +174,14 @@ describe("/api", () => {
                     });
                 });
         });
+        test("status 200 - returns articles sorted by date when no sorted param given ", () => {
+            return request(app)
+                .get("/api/articles")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at");
+                });
+        });
+        test("status 200 - returns articles sorted by column selected ", () => {});
     });
 });

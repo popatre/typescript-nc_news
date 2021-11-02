@@ -17,9 +17,10 @@ exports.getArticleById = async (req, res, next) => {
 };
 
 exports.getAllArticles = async (req, res, next) => {
+    const { sort_by } = req.query;
     try {
-        const articles = await fetchAllArticles();
-        res.status(200).send(articles);
+        const articles = await fetchAllArticles(sort_by);
+        res.status(200).send({ articles });
     } catch (err) {
         next(err);
     }
