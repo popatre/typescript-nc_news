@@ -198,5 +198,33 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid sort query");
                 });
         });
+        test("status 200 - orders db by ascending as default ", () => {
+            return request(app)
+                .get("/api/articles")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        ascending: true,
+                    });
+                });
+        });
+        test("status 200 - accepts order query ", () => {
+            return request(app)
+                .get("/api/articles?order=desc")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true,
+                    });
+                });
+        });
+        test("status 400 - invalid order query ", () => {
+            return request(app)
+                .get("/api/articles?order=notanorder")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid order query");
+                });
+        });
     });
 });

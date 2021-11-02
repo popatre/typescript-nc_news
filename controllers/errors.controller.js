@@ -15,8 +15,6 @@ exports.psqlErrors = (err, req, res, next) => {
     console.log(err.code, "<----PSQL CODE");
     if (err.code === "22P02") {
         res.status(400).send({ message: "invalid request" });
-    } else if (err.code === "42703") {
-        res.status(400).send({ message: "invalid sort query" });
     } else {
         next(err);
     }

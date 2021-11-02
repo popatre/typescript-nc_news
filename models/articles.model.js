@@ -17,9 +17,16 @@ exports.fetchArticleById = async (id) => {
     return rows[0];
 };
 
-exports.fetchAllArticles = async (sort_by = "created_at") => {
-    if (!["title", "topic", "author", "body", "created_at", "votes"]) {
-        return Promise.reject();
+exports.fetchAllArticles = async (sort_by = "created_at", order = "asc") => {
+    if (
+        !["title", "topic", "author", "body", "created_at", "votes"].includes(
+            sort_by
+        )
+    ) {
+        return Promise.reject({ status: 400, msg: "invalid sort query" });
+    }
+    if (!["asc", "desc"].includes(order)) {
+        return Promise.reject({ status: 400, msg: "invalid order query" });
     }
 
     const { rows } = await db.query(`
@@ -28,7 +35,7 @@ exports.fetchAllArticles = async (sort_by = "created_at") => {
     LEFT JOIN comments
     ON articles.article_id = comments.article_id
     GROUP BY articles.article_id
-    ORDER BY ${sort_by};
+    ORDER BY ${sort_by} ${order};
     `);
     return rows;
 };
