@@ -18,6 +18,10 @@ exports.fetchArticleById = async (id) => {
 };
 
 exports.fetchAllArticles = async (sort_by = "created_at") => {
+    if (!["title", "topic", "author", "body", "created_at", "votes"]) {
+        return Promise.reject();
+    }
+
     const { rows } = await db.query(`
     SELECT articles.*, COUNT (comments.article_id) AS comment_count
     FROM articles

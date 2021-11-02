@@ -182,6 +182,21 @@ describe("/api", () => {
                     expect(body.articles).toBeSortedBy("created_at");
                 });
         });
-        test("status 200 - returns articles sorted by column selected ", () => {});
+        test("status 200 - returns articles sorted by column selected ", () => {
+            return request(app)
+                .get("/api/articles?sort_by=author")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeSortedBy("author");
+                });
+        });
+        test("status 400 - invalid sort query/not a column in db ", () => {
+            return request(app)
+                .get("/api/articles?sort_by=notacolumn")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid sort query");
+                });
+        });
     });
 });

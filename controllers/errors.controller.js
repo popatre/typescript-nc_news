@@ -3,7 +3,7 @@ exports.notARoute = (req, res) => {
 };
 
 exports.errors400 = (err, req, res, next) => {
-    console.log(err.code, "<----PSQL CODE");
+    //console.log(err.code, "<----PSQL CODE");
     if (err.status) {
         res.status(err.status).send({ message: err.msg });
     } else {
@@ -15,6 +15,8 @@ exports.psqlErrors = (err, req, res, next) => {
     console.log(err.code, "<----PSQL CODE");
     if (err.code === "22P02") {
         res.status(400).send({ message: "invalid request" });
+    } else if (err.code === "42703") {
+        res.status(400).send({ message: "invalid sort query" });
     } else {
         next(err);
     }
