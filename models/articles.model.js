@@ -48,6 +48,8 @@ exports.fetchAllArticles = async (
     ORDER BY ${sort_by} ${order}`;
 
     const { rows } = await db.query(queryStr, topicArr);
+    if (rows.length === 0)
+        return Promise.reject({ status: 400, msg: "invalid input" });
     return rows;
 };
 

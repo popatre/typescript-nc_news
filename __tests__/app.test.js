@@ -226,12 +226,20 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid order query");
                 });
         });
-        test.only("status 200 - filters by topic query ", () => {
+        test("status 200 - filters by topic query ", () => {
             return request(app)
                 .get("/api/articles?topic=cats")
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.articles).toHaveLength(1);
+                });
+        });
+        test("status 400 - tries to filter by topic that doesnt exist ", () => {
+            return request(app)
+                .get("/api/articles?topic=notatopic")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
                 });
         });
     });
