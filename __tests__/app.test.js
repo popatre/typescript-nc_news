@@ -262,5 +262,13 @@ describe("/api", () => {
                     });
                 });
         });
+        test("status 404 - requests comments from an article that does not exist ", () => {
+            return request(app)
+                .get("/api/articles/1000/comments")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("no comments found");
+                });
+        });
     });
 });
