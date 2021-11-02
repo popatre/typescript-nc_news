@@ -376,4 +376,19 @@ describe("/api", () => {
                 });
         });
     });
+    describe("DELETE/api/comments/:comment_id", () => {
+        test("Status 204 - no content after successful deletion by id ", () => {
+            return request(app)
+                .delete("/api/comments/1")
+                .expect(204)
+                .then(() => {
+                    return request(app)
+                        .get("/api/comments")
+                        .expect(200)
+                        .then(({ body }) => {
+                            expect(body.comments).toHaveLength(17);
+                        });
+                });
+        });
+    });
 });
