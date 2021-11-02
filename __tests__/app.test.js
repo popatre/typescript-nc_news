@@ -226,5 +226,13 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid order query");
                 });
         });
+        test.only("status 200 - filters by topic query ", () => {
+            return request(app)
+                .get("/api/articles?topic=cats")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toHaveLength(1);
+                });
+        });
     });
 });

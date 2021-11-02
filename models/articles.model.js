@@ -17,7 +17,11 @@ exports.fetchArticleById = async (id) => {
     return rows[0];
 };
 
-exports.fetchAllArticles = async (sort_by = "created_at", order = "asc") => {
+exports.fetchAllArticles = async (
+    sort_by = "created_at",
+    order = "asc",
+    topic
+) => {
     if (
         !["title", "topic", "author", "body", "created_at", "votes"].includes(
             sort_by
@@ -29,14 +33,21 @@ exports.fetchAllArticles = async (sort_by = "created_at", order = "asc") => {
         return Promise.reject({ status: 400, msg: "invalid order query" });
     }
 
-    const { rows } = await db.query(`
-    SELECT articles.*, COUNT (comments.article_id) AS comment_count
+    let queryStr = `SELECT articles.*, COUNT (comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments
-    ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY ${sort_by} ${order};
-    `);
+    ON articles.article_id = comments.article_id `;
+
+    const topicArr = [];
+    if (topic) {
+        topicArr.push(topic);
+        queryStr += `WHERE topic = $1 `;
+    }
+
+    queryStr += `GROUP BY articles.article_id 
+    ORDER BY ${sort_by} ${order}`;
+
+    const { rows } = await db.query(queryStr, topicArr);
     return rows;
 };
 

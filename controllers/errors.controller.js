@@ -13,6 +13,7 @@ exports.errors400 = (err, req, res, next) => {
 
 exports.psqlErrors = (err, req, res, next) => {
     console.log(err.code, "<----PSQL CODE");
+    console.log(err);
     if (err.code === "22P02") {
         res.status(400).send({ message: "invalid request" });
     } else {
