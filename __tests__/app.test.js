@@ -243,4 +243,24 @@ describe("/api", () => {
                 });
         });
     });
+    describe("GET/api/articles/:article_id/comments", () => {
+        test("status 200 - responds with an array of comment for the article requested ", () => {
+            return request(app)
+                .get("/api/articles/1/comments")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                    expect(body.comments).toHaveLength(11);
+                    body.comments.forEach((comment) => {
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                        });
+                    });
+                });
+        });
+    });
 });

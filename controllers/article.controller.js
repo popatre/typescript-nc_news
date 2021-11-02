@@ -3,6 +3,7 @@ const {
     incrementVotesByID,
     incrementVotesById,
     fetchAllArticles,
+    fetchArticleCommentsById,
 } = require("../models/articles.model");
 
 exports.getArticleById = async (req, res, next) => {
@@ -32,6 +33,16 @@ exports.updateVotesById = async (req, res, next) => {
     try {
         const article = await incrementVotesById(article_id, inc_votes);
         res.status(201).send({ article });
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.getArticleCommentsById = async (req, res, next) => {
+    const { article_id } = req.params;
+    try {
+        const comments = await fetchArticleCommentsById(article_id);
+        res.status(200).send({ comments });
     } catch (err) {
         next(err);
     }

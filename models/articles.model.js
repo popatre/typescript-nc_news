@@ -66,3 +66,11 @@ exports.incrementVotesById = async (id, increment) => {
     );
     return rows[0];
 };
+
+exports.fetchArticleCommentsById = async (id) => {
+    const { rows } = await db.query(
+        "SELECT * FROM comments WHERE article_id = $1;",
+        [id]
+    );
+    return rows;
+};
