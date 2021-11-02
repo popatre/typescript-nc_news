@@ -390,5 +390,21 @@ describe("/api", () => {
                         });
                 });
         });
+        test("Status 404 - request deleted of a comment id that doesnt exist ", () => {
+            return request(app)
+                .delete("/api/comments/10000")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("comment not found");
+                });
+        });
+        test("Status 400 - request id in wrong format ", () => {
+            return request(app)
+                .delete("/api/comments/wrongformat")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid request");
+                });
+        });
     });
 });
