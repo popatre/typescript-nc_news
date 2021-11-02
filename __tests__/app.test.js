@@ -361,5 +361,19 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid content");
                 });
         });
+        test("status 406 - more than expected content on the post request ", () => {
+            const commentInput = {
+                username: "notausername",
+                body: "this is the test body",
+                votes: 100,
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(406)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid content");
+                });
+        });
     });
 });
