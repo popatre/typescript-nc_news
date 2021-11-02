@@ -4,6 +4,7 @@ const {
     incrementVotesById,
     fetchAllArticles,
     fetchArticleCommentsById,
+    addCommentById,
 } = require("../models/articles.model");
 
 exports.getArticleById = async (req, res, next) => {
@@ -46,4 +47,11 @@ exports.getArticleCommentsById = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+};
+
+exports.postCommentById = async (req, res, next) => {
+    const { article_id } = req.params;
+    const { username, body } = req.body;
+    const comment = await addCommentById(article_id, username, body);
+    res.status(201).send({ comment });
 };

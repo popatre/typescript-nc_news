@@ -287,4 +287,27 @@ describe("/api", () => {
                 });
         });
     });
+    describe("POST/api/articles/:article_id/comments", () => {
+        test("status 201 - successfully adds new comment with article id given, and returns posted comment ", () => {
+            const commentInput = {
+                username: "icellusedkars",
+                body: "This is the new comment",
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(201)
+                .then(({ body }) => {
+                    const { comment } = body;
+                    expect(comment).toMatchObject({
+                        body: "This is the new comment",
+                        votes: 0,
+                        author: "icellusedkars",
+                        article_id: 1,
+                        created_at: expect.any(String),
+                        comment_id: expect.any(Number),
+                    });
+                });
+        });
+    });
 });
