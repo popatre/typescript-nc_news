@@ -16,6 +16,8 @@ exports.psqlErrors = (err, req, res, next) => {
     console.log(err);
     if (err.code === "22P02") {
         res.status(400).send({ message: "invalid request" });
+    } else if (err.code === "23503") {
+        res.status(406).send({ message: "invalid content" });
     } else {
         next(err);
     }

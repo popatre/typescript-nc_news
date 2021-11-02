@@ -309,5 +309,57 @@ describe("/api", () => {
                     });
                 });
         });
+        test("status 400 - missing values on post username ", () => {
+            const commentInput = {
+                username: "",
+                body: "This is the new comment",
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - missing values on post body ", () => {
+            const commentInput = {
+                username: "icellusedkars",
+                body: "",
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 406 - not a valid username on post body ", () => {
+            const commentInput = {
+                username: "notausername",
+                body: "This is the test body",
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(406)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid content");
+                });
+        });
+        test("status 406 - not valid data type in the body ", () => {
+            const commentInput = {
+                username: "notausername",
+                body: 12345,
+            };
+            return request(app)
+                .post("/api/articles/1/comments")
+                .send(commentInput)
+                .expect(406)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid content");
+                });
+        });
     });
 });

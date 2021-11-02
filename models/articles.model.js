@@ -87,6 +87,12 @@ exports.fetchArticleCommentsById = async (id) => {
 };
 
 exports.addCommentById = async (id, username, body) => {
+    if (username === undefined || username.length === 0) {
+        return Promise.reject({ status: 400, msg: "invalid input" });
+    }
+    if (body === undefined || body.length === 0) {
+        return Promise.reject({ status: 400, msg: "invalid input" });
+    }
     const { rows } = await db.query(
         `INSERT INTO comments(body, author, article_id) 
     VALUES ($1, $2, $3) RETURNING *;`,

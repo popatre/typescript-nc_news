@@ -52,6 +52,10 @@ exports.getArticleCommentsById = async (req, res, next) => {
 exports.postCommentById = async (req, res, next) => {
     const { article_id } = req.params;
     const { username, body } = req.body;
-    const comment = await addCommentById(article_id, username, body);
-    res.status(201).send({ comment });
+    try {
+        const comment = await addCommentById(article_id, username, body);
+        res.status(201).send({ comment });
+    } catch (err) {
+        next(err);
+    }
 };
