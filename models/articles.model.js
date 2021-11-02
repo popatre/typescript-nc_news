@@ -17,9 +17,20 @@ exports.fetchArticleById = async (id) => {
     return rows[0];
 };
 
+exports.fetchAllArticles = async () => {
+    const { rows } = await db.query(`
+    SELECT articles.*, COUNT (comments.article_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments
+    ON articles.article_id = comments.article_id
+    GROUP BY articles.article_id;
+    `);
+    return rows;
+};
+
 exports.incrementVotesById = async (id, increment) => {
     if (increment === undefined || increment.length === 0) {
-        return Promise.reject({ status: 406, msg: "invalid input" });
+        return Promise.reject({ status: 400, msg: "invalid input" });
     }
 
     const { rows } = await db.query(
