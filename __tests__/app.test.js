@@ -242,6 +242,14 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid input");
                 });
         });
+        test("status 200 - queries existing topic, but with no articles associated ", () => {
+            return request(app)
+                .get("/api/articles?topic=paper")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toEqual([]);
+                });
+        });
     });
     describe("GET/api/articles/:article_id/comments", () => {
         test("status 200 - responds with an array of comment for the article requested ", () => {
@@ -265,6 +273,14 @@ describe("/api", () => {
         test("status 404 - requests comments from an article that does not exist ", () => {
             return request(app)
                 .get("/api/articles/1000/comments")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("no comments found");
+                });
+        });
+        test("status 404 - requests valid article, but does not have any comments associated ", () => {
+            return request(app)
+                .get("/api/articles/2/comments")
                 .expect(404)
                 .then(({ body }) => {
                     expect(body.message).toBe("no comments found");
