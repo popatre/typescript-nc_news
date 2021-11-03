@@ -407,4 +407,14 @@ describe("/api", () => {
                 });
         });
     });
+    describe("GET/api", () => {
+        test("status 200 - responds with JSON file with all available end points ", () => {
+            return request(app)
+                .get("/api")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body).toBeInstanceOf(Object);
+                });
+        });
+    });
 });
