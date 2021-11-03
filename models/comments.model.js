@@ -20,3 +20,13 @@ exports.fetchAllComments = async () => {
     const { rows } = await db.query(`SELECT * FROM comments`);
     return rows;
 };
+exports.addVotesByCommentId = async (id, increment) => {
+    const { rows } = await db.query(
+        `UPDATE comments 
+    SET votes = votes + $1 
+    WHERE comment_id = $2 RETURNING *;`,
+        [increment, id]
+    );
+    console.log(rows[0]);
+    return rows[0];
+};

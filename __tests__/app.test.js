@@ -455,5 +455,33 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid username");
                 });
         });
+        test("status 404 - username include capitalisation not found in the database", () => {
+            return request(app)
+                .get("/api/users/Lurker")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid username");
+                });
+        });
+    });
+    describe("PATCH /api/comments/:comment_id", () => {
+        test("status 201 - increments votes correctly and returns updated comment ", () => {
+            const update = { inc_votes: 10 };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(201)
+                .then(({ body }) => {
+                    const { comment } = body;
+                    expect(comment).toMatchObject({
+                        comment_id: 1,
+                        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                        votes: 26,
+                        author: "butter_bridge",
+                        article_id: 9,
+                        created_at: expect.any(String),
+                    });
+                });
+        });
     });
 });
