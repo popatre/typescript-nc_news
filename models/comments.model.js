@@ -20,7 +20,10 @@ exports.fetchAllComments = async () => {
     const { rows } = await db.query(`SELECT * FROM comments`);
     return rows;
 };
-exports.addVotesByCommentId = async (id, increment) => {
+exports.addVotesByCommentId = async (id, increment, reqLength) => {
+    if (increment === undefined || increment.length === 0 || reqLength > 1) {
+        return Promise.reject({ status: 400, msg: "invalid input" });
+    }
     const { rows } = await db.query(
         `UPDATE comments 
     SET votes = votes + $1 

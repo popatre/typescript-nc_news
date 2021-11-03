@@ -31,8 +31,13 @@ exports.getAllArticles = async (req, res, next) => {
 exports.updateVotesById = async (req, res, next) => {
     const { article_id } = req.params;
     const { inc_votes } = req.body;
+    const reqLength = Object.keys(req.body).length;
     try {
-        const article = await incrementVotesById(article_id, inc_votes);
+        const article = await incrementVotesById(
+            article_id,
+            inc_votes,
+            reqLength
+        );
         res.status(201).send({ article });
     } catch (err) {
         next(err);

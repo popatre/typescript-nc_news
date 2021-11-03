@@ -61,8 +61,8 @@ exports.fetchAllArticles = async (
     return rows;
 };
 
-exports.incrementVotesById = async (id, increment) => {
-    if (increment === undefined || increment.length === 0) {
+exports.incrementVotesById = async (id, increment, reqLength) => {
+    if (increment === undefined || increment.length === 0 || reqLength > 1) {
         return Promise.reject({ status: 400, msg: "invalid input" });
     }
 

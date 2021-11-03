@@ -26,8 +26,9 @@ exports.getAllComments = async (req, res, next) => {
 exports.updateVotesByCommentId = async (req, res, next) => {
     const { comment_id } = req.params;
     const { inc_votes } = req.body;
+    const reqLength = Object.keys(req.body).length;
 
-    addVotesByCommentId(comment_id, inc_votes)
+    addVotesByCommentId(comment_id, inc_votes, reqLength)
         .then((comment) => {
             res.status(201).send({ comment });
         })

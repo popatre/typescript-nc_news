@@ -143,7 +143,7 @@ describe("/api", () => {
                 });
         });
         test("status 400 - extra key on patch object  ", () => {
-            const update = { inc_vote: 10, name: "mitch" };
+            const update = { inc_votes: 10, name: "mitch" };
             return request(app)
                 .patch("/api/articles/1")
                 .send(update)
@@ -481,6 +481,64 @@ describe("/api", () => {
                         article_id: 9,
                         created_at: expect.any(String),
                     });
+                });
+        });
+        test("status 201 - decrements votes correctly and returns updated comment ", () => {
+            const update = { inc_votes: -6 };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(201)
+                .then(({ body }) => {
+                    const { comment } = body;
+                    expect(comment).toMatchObject({
+                        comment_id: 1,
+                        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                        votes: 10,
+                        author: "butter_bridge",
+                        article_id: 9,
+                        created_at: expect.any(String),
+                    });
+                });
+        });
+        test("status 400 - missing data on the patch object ", () => {
+            const update = { inc_votes: "" };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - incorrect data type on patch object ", () => {
+            const update = { inc_votes: "stringdata" };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid request");
+                });
+        });
+        test("status 400 - misspelt key on patch object ", () => {
+            const update = { inc_vot: "10" };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - extra key on patch object ", () => {
+            const update = { inc_votes: 10, article_id: 10 };
+            return request(app)
+                .patch("/api/comments/1")
+                .send(update)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
                 });
         });
     });
