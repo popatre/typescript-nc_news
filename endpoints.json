@@ -115,5 +115,15 @@
     "DELETE /api/comments/:comment_id": {
         "description": "deletes the comment based on the comment id given",
         "queries": []
+    },
+    "GET /api/users": {
+        "descripton": "serves an array of objects containing all the usernames in the database",
+        "queries": [],
+        "exampleResponse": {
+            "usernames": [
+                { "username": "butter_bridge" },
+                { "username": "icellusedkars" }
+            ]
+        }
     }
 }

@@ -21,7 +21,7 @@ A link the the github repository can be found here: <https://github.com/popatre/
 <ul>
 <li>Node: v14.16.0   </li>
 <li>Postgres: v13.0  </li>
-<li>node package manager </li>
+<li>node package manager: v7.24.0 </li>
 
 </ul>
 
@@ -116,6 +116,8 @@ GET /api/articles/:article_id/comments gets all the comments belonging to the re
 GET /api/articles gets all the articles in the database
 
 GET /api/comments responds with all the comments in the database
+
+GET /api/users responds with all the usernames in the database
 
 DELETE /api/comments/:comment_id deletes the requested comment
 

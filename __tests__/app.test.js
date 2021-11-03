@@ -417,4 +417,19 @@ describe("/api", () => {
                 });
         });
     });
+    describe("GET /api/users", () => {
+        test("Status 200 - responds with an array of username objects ", () => {
+            return request(app)
+                .get("/api/users")
+                .expect(200)
+                .then(({ body }) => {
+                    const { usernames } = body;
+                    usernames.forEach((username) => {
+                        expect(username).toMatchObject({
+                            username: expect.any(String),
+                        });
+                    });
+                });
+        });
+    });
 });
