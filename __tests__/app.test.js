@@ -7,6 +7,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 const app = require("../app");
+const e = require("express");
 
 describe("/api", () => {
     test("status 404 - not a route/path ", () => {
@@ -539,6 +540,21 @@ describe("/api", () => {
                 .expect(400)
                 .then(({ body }) => {
                     expect(body.message).toBe("invalid input");
+                });
+        });
+    });
+    describe("DELETE /api/articles/:article_id", () => {
+        test("Status 204 - successfully deletes articles from article id", () => {
+            return request(app)
+                .delete("/api/articles/1")
+                .expect(204)
+                .then(() => {
+                    return request(app)
+                        .get("/api/articles")
+                        .expect(200)
+                        .then(({ body }) => {
+                            expect(body.articles).toHaveLength(11);
+                        });
                 });
         });
     });

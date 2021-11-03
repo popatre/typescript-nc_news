@@ -100,3 +100,11 @@ exports.addCommentById = async (id, username, body) => {
     );
     return rows[0];
 };
+
+exports.removeArticleById = async (id) => {
+    const deleted = await db.query(
+        `DELETE FROM articles WHERE article_id = $1;`,
+        [id]
+    );
+    return deleted;
+};
