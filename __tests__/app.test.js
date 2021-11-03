@@ -544,7 +544,7 @@ describe("/api", () => {
         });
     });
     describe("DELETE /api/articles/:article_id", () => {
-        test("Status 204 - successfully deletes articles from article id", () => {
+        test("Status 204 - successfully deletes article by article id", () => {
             return request(app)
                 .delete("/api/articles/1")
                 .expect(204)
@@ -555,6 +555,14 @@ describe("/api", () => {
                         .then(({ body }) => {
                             expect(body.articles).toHaveLength(11);
                         });
+                });
+        });
+        test("Status 404 - requests to delete article by id that doesnt exist", () => {
+            return request(app)
+                .delete("/api/articles/100000")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("article not found");
                 });
         });
     });

@@ -109,6 +109,8 @@ GET /api/articles/:article_id, which responds with the article corresponding to 
 
 PATCH /api/articles/:article_id modifies the votes on the article in question
 
+DELETE /api/articles/:article_id deletes the article selected by its id
+
 POST /api/articles/:article_id/comments adds a new comment to the requested article
 
 GET /api/articles/:article_id/comments gets all the comments belonging to the requested article

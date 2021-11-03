@@ -136,5 +136,9 @@
                 "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
             }
         }
+    },
+    "DELETE api/articles/:article_id": {
+        "description": "deletes the articles by the requested id",
+        "queries": []
     }
 }
