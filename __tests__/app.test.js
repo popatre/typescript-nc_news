@@ -432,4 +432,20 @@ describe("/api", () => {
                 });
         });
     });
+    describe("GET /api/users/:username", () => {
+        test("status 200 - successfully responds with a username object, based on the username requested", () => {
+            return request(app)
+                .get("/api/users/lurker")
+                .expect(200)
+                .then(({ body }) => {
+                    const { user } = body;
+                    expect(user).toMatchObject({
+                        username: "lurker",
+                        avatar_url:
+                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                        name: "do_nothing",
+                    });
+                });
+        });
+    });
 });
