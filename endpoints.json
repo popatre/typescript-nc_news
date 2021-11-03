@@ -125,5 +125,16 @@
                 { "username": "icellusedkars" }
             ]
         }
+    },
+    "GET /api/users:username": {
+        "descripton": "serves an objects containing the details of the username requested",
+        "queries": [],
+        "exampleResponse": {
+            "user": {
+                "username": "lurker",
+                "name": "do nothing",
+                "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+            }
+        }
     }
 }

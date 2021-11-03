@@ -119,6 +119,8 @@ GET /api/comments responds with all the comments in the database
 
 GET /api/users responds with all the usernames in the database
 
+GET /api/users:username responds the details of the username requested
+
 DELETE /api/comments/:comment_id deletes the requested comment
 
 GET /api serves a json object of the path above, with example responses

@@ -13,7 +13,6 @@ exports.getAllUsernames = (req, res, next) => {
 
 exports.getUsernameByName = (req, res, next) => {
     const { username } = req.params;
-    console.log(username);
     fetchUsernameByName(username)
         .then((user) => {
             res.status(200).send({ user });

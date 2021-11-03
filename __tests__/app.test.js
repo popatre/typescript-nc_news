@@ -447,5 +447,13 @@ describe("/api", () => {
                     });
                 });
         });
+        test("status 404 - asked for data from a username that does not exist in the database", () => {
+            return request(app)
+                .get("/api/users/notausername")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid username");
+                });
+        });
     });
 });
