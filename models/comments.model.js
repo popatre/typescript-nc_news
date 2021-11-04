@@ -21,8 +21,16 @@ exports.fetchAllComments = async () => {
     return rows;
 };
 exports.addVotesByCommentId = async (id, increment, reqLength) => {
-    if (increment === undefined || increment.length === 0 || reqLength > 1) {
+    if (reqLength > 1) {
         return Promise.reject({ status: 400, msg: "invalid input" });
+    }
+
+    if (increment === undefined || increment.length === 0) {
+        const { rows } = await db.query(
+            `SELECT * FROM comments WHERE comment_id = $1;`,
+            [id]
+        );
+        return rows[0];
     }
     const { rows } = await db.query(
         `UPDATE comments 
@@ -30,6 +38,5 @@ exports.addVotesByCommentId = async (id, increment, reqLength) => {
     WHERE comment_id = $2 RETURNING *;`,
         [increment, id]
     );
-    console.log(rows[0]);
     return rows[0];
 };

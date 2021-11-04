@@ -30,7 +30,7 @@ exports.updateVotesByCommentId = async (req, res, next) => {
 
     addVotesByCommentId(comment_id, inc_votes, reqLength)
         .then((comment) => {
-            res.status(201).send({ comment });
+            res.status(200).send({ comment });
         })
         .catch(next);
 };

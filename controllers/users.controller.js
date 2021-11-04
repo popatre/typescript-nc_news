@@ -5,8 +5,8 @@ const {
 
 exports.getAllUsernames = (req, res, next) => {
     fetchAllUsernames()
-        .then((usernames) => {
-            res.status(200).send({ usernames });
+        .then((users) => {
+            res.status(200).send({ users });
         })
         .catch(next);
 };
@@ -14,8 +14,8 @@ exports.getAllUsernames = (req, res, next) => {
 exports.getUsernameByName = (req, res, next) => {
     const { username } = req.params;
     fetchUsernameByName(username)
-        .then((user) => {
-            res.status(200).send({ user });
+        .then((users) => {
+            res.status(200).send({ users });
         })
         .catch(next);
 };

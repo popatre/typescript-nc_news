@@ -448,8 +448,8 @@ describe("/api", () => {
                 .get("/api/users")
                 .expect(200)
                 .then(({ body }) => {
-                    const { usernames } = body;
-                    usernames.forEach((username) => {
+                    const { users } = body;
+                    users.forEach((username) => {
                         expect(username).toMatchObject({
                             username: expect.any(String),
                         });
@@ -463,8 +463,8 @@ describe("/api", () => {
                 .get("/api/users/lurker")
                 .expect(200)
                 .then(({ body }) => {
-                    const { user } = body;
-                    expect(user).toMatchObject({
+                    const { users } = body;
+                    expect(users).toMatchObject({
                         username: "lurker",
                         avatar_url:
                             "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
@@ -490,12 +490,12 @@ describe("/api", () => {
         });
     });
     describe("PATCH /api/comments/:comment_id", () => {
-        test("status 201 - increments votes correctly and returns updated comment ", () => {
+        test("status 200 - increments votes correctly and returns updated comment ", () => {
             const update = { inc_votes: 10 };
             return request(app)
                 .patch("/api/comments/1")
                 .send(update)
-                .expect(201)
+                .expect(200)
                 .then(({ body }) => {
                     const { comment } = body;
                     expect(comment).toMatchObject({
@@ -508,12 +508,12 @@ describe("/api", () => {
                     });
                 });
         });
-        test("status 201 - decrements votes correctly and returns updated comment ", () => {
+        test("status 200 - decrements votes correctly and returns updated comment ", () => {
             const update = { inc_votes: -6 };
             return request(app)
                 .patch("/api/comments/1")
                 .send(update)
-                .expect(201)
+                .expect(200)
                 .then(({ body }) => {
                     const { comment } = body;
                     expect(comment).toMatchObject({
@@ -526,14 +526,22 @@ describe("/api", () => {
                     });
                 });
         });
-        test("status 400 - missing data on the patch object ", () => {
+        test("status 200 - missing data on the patch object - returns unchanged comment", () => {
             const update = { inc_votes: "" };
             return request(app)
                 .patch("/api/comments/1")
                 .send(update)
-                .expect(400)
+                .expect(200)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid input");
+                    const { comment } = body;
+                    expect(comment).toMatchObject({
+                        comment_id: 1,
+                        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                        votes: 16,
+                        author: "butter_bridge",
+                        article_id: 9,
+                        created_at: expect.any(String),
+                    });
                 });
         });
         test("status 400 - incorrect data type on patch object ", () => {
@@ -546,14 +554,22 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid request");
                 });
         });
-        test("status 400 - misspelt key on patch object ", () => {
+        test("status 200 - misspelt key on patch object - returns unchanged comment ", () => {
             const update = { inc_vot: "10" };
             return request(app)
                 .patch("/api/comments/1")
                 .send(update)
-                .expect(400)
+                .expect(200)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid input");
+                    const { comment } = body;
+                    expect(comment).toMatchObject({
+                        comment_id: 1,
+                        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                        votes: 16,
+                        author: "butter_bridge",
+                        article_id: 9,
+                        created_at: expect.any(String),
+                    });
                 });
         });
         test("status 400 - extra key on patch object ", () => {
