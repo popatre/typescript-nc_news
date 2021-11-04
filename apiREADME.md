@@ -89,7 +89,7 @@ The following dependencies should have been installed:
 </li>
 <br>
 
-<li> To run the server locally, type node <code>listen.js</code> in your terminal. The terminal should confirm that it has started listening</li>
+<li> To run the server locally, type <code>npm start</code> in your terminal. The terminal should confirm that it has started listening</li>
 <br>
 <li> Method requests (GET, PATCH, POST, DELETE) can now be performed at <code> http://localhost:9090 </code> using your API endpoint testing tool of choice i.e. postman, insomnia etc </li><br>
 <i> The available routes and methods can be found below </i>
