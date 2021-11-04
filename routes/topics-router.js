@@ -3,8 +3,14 @@ const {
     getAllTopics,
     postNewTopic,
 } = require("../controllers/topics.controller");
+
+const { methodNotAllowed } = require("../controllers/errors.controller");
 const topicsRouter = express.Router();
 
-topicsRouter.route("/").get(getAllTopics).post(postNewTopic);
+topicsRouter
+    .route("/")
+    .get(getAllTopics)
+    .post(postNewTopic)
+    .all(methodNotAllowed);
 
 module.exports = topicsRouter;

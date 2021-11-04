@@ -742,4 +742,29 @@ describe("/api", () => {
                 });
         });
     });
+    describe("Bad methods on existing routes", () => {
+        describe("/api/topics", () => {
+            test("status 405 - PATCH /api/topics", () => {
+                const input = {
+                    description: "new description",
+                    slug: "mitch123",
+                };
+                return request(app)
+                    .patch("/api/topics")
+                    .send(input)
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+            test("status 406 - DELETE /api/topics", () => {
+                return request(app)
+                    .delete("/api/topics")
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+        });
+    });
 });

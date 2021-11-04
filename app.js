@@ -7,6 +7,7 @@ const {
     notARoute,
     errors400,
     psqlErrors,
+    methodNotAllowed,
 } = require("./controllers/errors.controller");
 
 app.use(express.json());
@@ -16,4 +17,5 @@ app.use("/api", apiRouter);
 app.all("*", notARoute);
 app.use(psqlErrors);
 app.use(errors400);
+app.use(methodNotAllowed);
 module.exports = app;

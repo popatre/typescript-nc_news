@@ -22,3 +22,6 @@ exports.psqlErrors = (err, req, res, next) => {
         next(err);
     }
 };
+exports.methodNotAllowed = (req, res, next) => {
+    res.status(405).send({ message: "bad method on this route" });
+};
