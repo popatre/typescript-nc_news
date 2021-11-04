@@ -57,12 +57,12 @@ describe("/api", () => {
                     });
                 });
         });
-        test("status 400 - requests id that doesnt exist with number parameter", () => {
+        test("status 404 - valid requests id that doesnt exist", () => {
             return request(app)
                 .get("/api/articles/2000")
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                    expect(body).toEqual({ message: "invalid request" });
+                    expect(body).toEqual({ message: "article not found" });
                 });
         });
         test("status 400 - requests id that doesnt exist with string parameter/wrong data type", () => {
@@ -75,12 +75,12 @@ describe("/api", () => {
         });
     });
     describe("PATCH/api/articles/:article_id", () => {
-        test("status 201 - increments votes correctly and returns updated article ", () => {
+        test("status 200 - increments votes correctly and returns updated article ", () => {
             const update = { inc_votes: 10 };
             return request(app)
                 .patch("/api/articles/1")
                 .send(update)
-                .expect(201)
+                .expect(200)
                 .then(({ body }) => {
                     const { article } = body;
                     expect(article).toMatchObject({
@@ -99,7 +99,7 @@ describe("/api", () => {
             return request(app)
                 .patch("/api/articles/1")
                 .send(update)
-                .expect(201)
+                .expect(200)
                 .then(({ body }) => {
                     const { article } = body;
                     expect(article).toMatchObject({
@@ -153,6 +153,26 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid input");
                 });
         });
+        test("status 400 - invalid id in url  ", () => {
+            const update = { inc_votes: 10 };
+            return request(app)
+                .patch("/api/articles/not-a-string")
+                .send(update)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid request");
+                });
+        });
+        test("status 404 - valid id, not non-existing Id in database  ", () => {
+            const update = { inc_votes: 10 };
+            return request(app)
+                .patch("/api/articles/9999")
+                .send(update)
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("article not found");
+                });
+        });
     });
     describe("GET/api/articles", () => {
         test("status 200 - responds with array of article objects, containing correct properties ", () => {
@@ -180,7 +200,9 @@ describe("/api", () => {
                 .get("/api/articles")
                 .expect(200)
                 .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("created_at");
+                    expect(body.articles).toBeSortedBy("created_at", {
+                        descending: true,
+                    });
                 });
         });
         test("status 200 - returns articles sorted by column selected ", () => {
@@ -188,7 +210,9 @@ describe("/api", () => {
                 .get("/api/articles?sort_by=author")
                 .expect(200)
                 .then(({ body }) => {
-                    expect(body.articles).toBeSortedBy("author");
+                    expect(body.articles).toBeSortedBy("author", {
+                        descending: true,
+                    });
                 });
         });
         test("status 400 - invalid sort query/not a column in db ", () => {
@@ -205,17 +229,17 @@ describe("/api", () => {
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.articles).toBeSortedBy("created_at", {
-                        ascending: true,
+                        descending: true,
                     });
                 });
         });
         test("status 200 - accepts order query ", () => {
             return request(app)
-                .get("/api/articles?order=desc")
+                .get("/api/articles?order=asc")
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.articles).toBeSortedBy("created_at", {
-                        descending: true,
+                        ascending: true,
                     });
                 });
         });

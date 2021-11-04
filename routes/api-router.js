@@ -1,5 +1,5 @@
 const express = require("express");
-const { endspointsJson } = require("../controllers/api.controller");
+const { endspoints } = require("../controllers/api.controller");
 const articleRouter = require("./articles-router");
 const commentsRouter = require("./comments-router");
 const topicsRouter = require("./topics-router");
@@ -10,6 +10,6 @@ apiRouter.use("/topics", topicsRouter);
 apiRouter.use("/articles", articleRouter);
 apiRouter.use("/comments", commentsRouter);
 apiRouter.use("/users", usersRouter);
-apiRouter.route("/").get(endspointsJson);
+apiRouter.route("/").get(endspoints);
 
 module.exports = apiRouter;

@@ -12,14 +12,14 @@ exports.fetchArticleById = async (id) => {
         [id]
     );
     if (rows.length === 0) {
-        return Promise.reject({ status: "400", msg: "invalid request" });
+        return Promise.reject({ status: "404", msg: "article not found" });
     }
     return rows[0];
 };
 
 exports.fetchAllArticles = async (
     sort_by = "created_at",
-    order = "asc",
+    order = "desc",
     topic
 ) => {
     if (
@@ -58,6 +58,7 @@ exports.fetchAllArticles = async (
             return Promise.reject({ status: 400, msg: "invalid input" });
         }
     }
+
     return rows;
 };
 
@@ -72,6 +73,17 @@ exports.incrementVotesById = async (id, increment, reqLength) => {
         WHERE article_id = $2 RETURNING *;`,
         [increment, id]
     );
+
+    if (rows.length === 0) {
+        const articalRes = await db.query(
+            `SELECT * FROM articles WHERE article_id = $1;`,
+            [id]
+        );
+        if (articalRes.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "article not found" });
+        }
+    }
+
     return rows[0];
 };
 

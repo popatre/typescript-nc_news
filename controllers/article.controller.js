@@ -40,7 +40,7 @@ exports.updateVotesById = async (req, res, next) => {
             inc_votes,
             reqLength
         );
-        res.status(201).send({ article });
+        res.status(200).send({ article });
     } catch (err) {
         next(err);
     }

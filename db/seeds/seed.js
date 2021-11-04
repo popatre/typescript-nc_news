@@ -18,34 +18,34 @@ const seed = (data) => {
         .then(() => {
             return db.query(`
                         CREATE TABLE topics(
-                        slug VARCHAR PRIMARY KEY UNIQUE,
+                        slug VARCHAR PRIMARY KEY,
                         description VARCHAR);
                 `);
         })
         .then(() => {
             return db.query(`
                         CREATE TABLE users(
-                        username VARCHAR PRIMARY KEY UNIQUE NOT NULL,
+                        username VARCHAR PRIMARY KEY NOT NULL,
                         avatar_url VARCHAR,
                         name VARCHAR NOT NULL);
                   `);
         })
         .then(() => {
             return db.query(`CREATE TABLE articles(
-                    article_id SERIAL PRIMARY KEY UNIQUE,
+                    article_id SERIAL PRIMARY KEY,
                     title VARCHAR NOT NULL,
                     body VARCHAR NOT NULL,
                     votes INT DEFAULT 0,
-                    topic VARCHAR REFERENCES topics(slug),
-                    author VARCHAR REFERENCES users(username),
+                    topic VARCHAR REFERENCES topics(slug) NOT NULL,
+                    author VARCHAR REFERENCES users(username) NOT NULL,
                     created_at VARCHAR DEFAULT CURRENT_TIMESTAMP
                   );`);
         })
         .then(() => {
             return db.query(`CREATE TABLE comments(
-                    comment_id SERIAL PRIMARY KEY UNIQUE,
-                    author VARCHAR REFERENCES users(username),
-                    article_id INT REFERENCES articles(article_id) ON DELETE CASCADE,
+                    comment_id SERIAL PRIMARY KEY,
+                    author VARCHAR REFERENCES users(username) NOT NULL,
+                    article_id INT REFERENCES articles(article_id) ON DELETE CASCADE NOT NULL,
                     created_at VARCHAR DEFAULT CURRENT_TIMESTAMP,
                     body VARCHAR NOT NULL,
                     votes INT DEFAULT 0
