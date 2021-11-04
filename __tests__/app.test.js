@@ -566,7 +566,7 @@ describe("/api", () => {
                 });
         });
     });
-    describe("POST /api/articles", () => {
+    describe.only("POST /api/articles", () => {
         test("status 201 - responds with newly added article with the correct properties", () => {
             const input = {
                 author: "icellusedkars",
@@ -591,11 +591,83 @@ describe("/api", () => {
                     });
                 });
         });
-        test.skip("status 400 - missing data from post object ", () => {});
-        test.skip("status 400 - missing keys from post object ", () => {});
-        test.skip("status 400 - extra keys on the post object ", () => {});
-        test.skip("status 400 - incorrect data type on post object ", () => {});
-        test.skip("status 400 - invalid username on post object ", () => {});
-        test.skip("status 400 - invalid topic on post object ", () => {});
+        test("status 400 - missing data from post object ", () => {
+            const input = {
+                author: "icellusedkars",
+                title: "",
+                body: "This is the body content",
+                topic: "cats",
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - missing keys from post object ", () => {
+            const input = {
+                author: "icellusedkars",
+
+                body: "This is the body content",
+                topic: "cats",
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - extra keys on the post object ", () => {
+            const input = {
+                author: "icellusedkars",
+                title: "Title here",
+                body: "This is the body content",
+                topic: "cats",
+                votes: 100,
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - invalid username on post object ", () => {
+            const input = {
+                author: "notAUserName",
+                title: "Title here",
+                body: "This is the body content",
+                topic: "cats",
+                votes: 100,
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - invalid topic on post object ", () => {
+            const input = {
+                author: "icellusedkars",
+                title: "Title here",
+                body: "This is the body content",
+                topic: "NotATopic",
+                votes: 100,
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
     });
 });

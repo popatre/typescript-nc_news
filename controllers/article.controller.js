@@ -80,8 +80,15 @@ exports.deleteArticleById = async (req, res, next) => {
 
 exports.postNewArticles = async (req, res, next) => {
     const { author, title, body, topic } = req.body;
+    const reqLength = Object.keys(req.body).length;
     try {
-        const article = await addNewArticle(title, topic, body, author);
+        const article = await addNewArticle(
+            title,
+            topic,
+            body,
+            author,
+            reqLength
+        );
         res.status(201).send({ article });
     } catch (err) {
         next(err);

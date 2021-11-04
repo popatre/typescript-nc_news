@@ -117,7 +117,21 @@ exports.removeArticleById = async (id) => {
     return deleted;
 };
 
-exports.addNewArticle = async (title, topic, body, author) => {
+exports.addNewArticle = async (title, topic, body, author, reqLength) => {
+    if (
+        title === undefined ||
+        title.length === 0 ||
+        topic === undefined ||
+        topic.length === 0 ||
+        body === undefined ||
+        body.length === 0 ||
+        author === undefined ||
+        author.length === 0 ||
+        reqLength > 4
+    ) {
+        return Promise.reject({ status: 400, msg: "invalid input" });
+    }
+
     const { rows } = await db.query(
         `INSERT INTO articles (title, topic, body, author)
         VALUES ($1, $2, $3, $4) RETURNING article_id;`,
