@@ -116,3 +116,15 @@ exports.removeArticleById = async (id) => {
     );
     return deleted;
 };
+
+exports.addNewArticle = async (title, topic, body, author) => {
+    const { rows } = await db.query(
+        `INSERT INTO articles (title, topic, body, author)
+        VALUES ($1, $2, $3, $4) RETURNING article_id;`,
+        [title, topic, body, author]
+    );
+    const articleId = rows[0].article_id;
+
+    const article = await exports.fetchArticleById(articleId);
+    return article;
+};

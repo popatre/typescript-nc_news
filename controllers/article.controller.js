@@ -6,6 +6,7 @@ const {
     fetchArticleCommentsById,
     addCommentById,
     removeArticleById,
+    addNewArticle,
 } = require("../models/articles.model");
 
 exports.getArticleById = async (req, res, next) => {
@@ -72,6 +73,16 @@ exports.deleteArticleById = async (req, res, next) => {
     try {
         const deleted = await removeArticleById(article_id);
         res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.postNewArticles = async (req, res, next) => {
+    const { author, title, body, topic } = req.body;
+    try {
+        const article = await addNewArticle(title, topic, body, author);
+        res.status(201).send({ article });
     } catch (err) {
         next(err);
     }

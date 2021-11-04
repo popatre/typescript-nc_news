@@ -6,6 +6,7 @@ const {
     getArticleCommentsById,
     postCommentById,
     deleteArticleById,
+    postNewArticles,
 } = require("../controllers/article.controller");
 const articleRouter = express.Router();
 
@@ -16,6 +17,6 @@ articleRouter
     .delete(deleteArticleById);
 articleRouter.route("/:article_id/comments").get(getArticleCommentsById);
 articleRouter.route("/:article_id/comments").post(postCommentById);
-articleRouter.route("/").get(getAllArticles);
+articleRouter.route("/").get(getAllArticles).post(postNewArticles);
 
 module.exports = articleRouter;

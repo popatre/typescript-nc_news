@@ -35,10 +35,10 @@ const seed = (data) => {
                     article_id SERIAL PRIMARY KEY UNIQUE,
                     title VARCHAR NOT NULL,
                     body VARCHAR NOT NULL,
-                    votes INT,
+                    votes INT DEFAULT 0,
                     topic VARCHAR REFERENCES topics(slug),
                     author VARCHAR REFERENCES users(username),
-                    created_at VARCHAR
+                    created_at VARCHAR DEFAULT CURRENT_TIMESTAMP
                   );`);
         })
         .then(() => {

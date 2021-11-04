@@ -566,4 +566,30 @@ describe("/api", () => {
                 });
         });
     });
+    describe("POST /api/articles", () => {
+        test("status 201 - responds with newly added article with the correct properties", () => {
+            const input = {
+                author: "icellusedkars",
+                title: "my brand new post",
+                body: "This is the body content",
+                topic: "cats",
+            };
+            return request(app)
+                .post("/api/articles")
+                .send(input)
+                .expect(201)
+                .then(({ body }) => {
+                    expect(body.article).toMatchObject({
+                        article_id: 13,
+                        title: "my brand new post",
+                        topic: "cats",
+                        author: "icellusedkars",
+                        votes: 0,
+                        body: "This is the body content",
+                        created_at: expect.any(String),
+                        comment_count: "0",
+                    });
+                });
+        });
+    });
 });
