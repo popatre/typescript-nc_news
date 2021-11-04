@@ -11,8 +11,9 @@ exports.getAllTopics = async (req, res, next) => {
 
 exports.postNewTopic = async (req, res, next) => {
     const { slug, description } = req.body;
+    const reqLength = Object.keys(req.body).length;
     try {
-        const topic = await addNewTopic(slug, description);
+        const topic = await addNewTopic(slug, description, reqLength);
         res.status(201).send({ topic });
     } catch (err) {
         next(err);

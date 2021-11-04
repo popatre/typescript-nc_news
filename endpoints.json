@@ -172,8 +172,8 @@
         },
         "exampleResponse": {
             "topic": {
-                "slug": "New topic here",
-                "description": "description for the topic"
+                "slug": "Your new topic",
+                "description": "This is a good description for the new topic"
             }
         }
     }

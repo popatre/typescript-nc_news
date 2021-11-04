@@ -688,5 +688,58 @@ describe("/api", () => {
                     });
                 });
         });
+        test("status 400 - missing data on post object", () => {
+            const input = {
+                slug: "",
+                description: "This is the new description",
+            };
+            return request(app)
+                .post("/api/topics")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - missing key/incorrect keys on post object", () => {
+            const input = {
+                slugsss: "New Topic",
+                description: "This is the new description",
+            };
+            return request(app)
+                .post("/api/topics")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - extra keys on post object", () => {
+            const input = {
+                slug: "New Topic",
+                description: 99999,
+                extraKey: "not allowed",
+            };
+            return request(app)
+                .post("/api/topics")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
+        test("status 400 - wrong data type on post object", () => {
+            const input = {
+                slug: "New Topic",
+                description: 99999,
+            };
+            return request(app)
+                .post("/api/topics")
+                .send(input)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid input");
+                });
+        });
     });
 });
