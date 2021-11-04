@@ -1,4 +1,6 @@
 const db = require("../db");
+const { fetchTopicBySlug } = require("./topics.model");
+const { fetchUsernameByName } = require("./users.model");
 
 exports.fetchArticleById = async (id) => {
     const { rows } = await db.query(
@@ -173,6 +175,9 @@ exports.addNewArticle = async (title, topic, body, author, reqLength) => {
     ) {
         return Promise.reject({ status: 400, msg: "invalid input" });
     }
+
+    const validUser = await fetchUsernameByName(author);
+    const validTopic = await fetchTopicBySlug(topic);
 
     const { rows } = await db.query(
         `INSERT INTO articles (title, topic, body, author)

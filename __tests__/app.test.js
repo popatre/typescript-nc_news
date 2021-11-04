@@ -687,36 +687,34 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid input");
                 });
         });
-        test("status 400 - invalid username on post object ", () => {
+        test("status 404 - not existant username on post object ", () => {
             const input = {
                 author: "notAUserName",
                 title: "Title here",
                 body: "This is the body content",
                 topic: "cats",
-                votes: 100,
             };
             return request(app)
                 .post("/api/articles")
                 .send(input)
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid input");
+                    expect(body.message).toBe("invalid username");
                 });
         });
-        test("status 400 - invalid topic on post object ", () => {
+        test("status 404 - non existant topic on post object ", () => {
             const input = {
                 author: "icellusedkars",
                 title: "Title here",
                 body: "This is the body content",
                 topic: "NotATopic",
-                votes: 100,
             };
             return request(app)
                 .post("/api/articles")
                 .send(input)
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid input");
+                    expect(body.message).toBe("topic not found");
                 });
         });
     });

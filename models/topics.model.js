@@ -22,3 +22,13 @@ exports.addNewTopic = async (slug, description, reqLength) => {
     );
     return rows[0];
 };
+
+exports.fetchTopicBySlug = async (slug) => {
+    const { rows } = await db.query(`SELECT * FROM topics WHERE slug = $1;`, [
+        slug,
+    ]);
+    if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "topic not found" });
+    }
+    return rows;
+};
