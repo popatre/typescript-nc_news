@@ -50,6 +50,7 @@ exports.getArticleCommentsById = async (req, res, next) => {
     const { article_id } = req.params;
     try {
         const comments = await fetchArticleCommentsById(article_id);
+
         res.status(200).send({ comments });
     } catch (err) {
         next(err);
@@ -59,8 +60,14 @@ exports.getArticleCommentsById = async (req, res, next) => {
 exports.postCommentById = async (req, res, next) => {
     const { article_id } = req.params;
     const { username, body } = req.body;
+    const reqLength = Object.keys(req.body).length;
     try {
-        const comment = await addCommentById(article_id, username, body);
+        const comment = await addCommentById(
+            article_id,
+            username,
+            body,
+            reqLength
+        );
         res.status(201).send({ comment });
     } catch (err) {
         next(err);

@@ -94,7 +94,7 @@ describe("/api", () => {
                     });
                 });
         });
-        test("status 201 - decrements votes correctly and returns updated article ", () => {
+        test("status 200 - decrements votes correctly and returns updated article ", () => {
             const update = { inc_votes: -10 };
             return request(app)
                 .patch("/api/articles/1")
@@ -303,12 +303,12 @@ describe("/api", () => {
                     expect(body.message).toBe("no comments found");
                 });
         });
-        test("status 404 - requests valid article, but does not have any comments associated ", () => {
+        test("status 200 - requests valid article, but does not have any comments associated ", () => {
             return request(app)
                 .get("/api/articles/2/comments")
-                .expect(404)
+                .expect(200)
                 .then(({ body }) => {
-                    expect(body.message).toBe("no comments found");
+                    expect(body.comments).toEqual([]);
                 });
         });
     });
@@ -360,7 +360,7 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid input");
                 });
         });
-        test("status 406 - not a valid username on post body ", () => {
+        test("status 404 - not an existing username on post body ", () => {
             const commentInput = {
                 username: "notausername",
                 body: "This is the test body",
@@ -368,36 +368,36 @@ describe("/api", () => {
             return request(app)
                 .post("/api/articles/1/comments")
                 .send(commentInput)
-                .expect(406)
+                .expect(404)
                 .then(({ body }) => {
                     expect(body.message).toBe("invalid content");
                 });
         });
-        test("status 406 - not valid data type in the body ", () => {
+        test("status 400 - not valid data type in the body ", () => {
             const commentInput = {
-                username: "notausername",
+                username: "icellusedkars",
                 body: 12345,
             };
             return request(app)
                 .post("/api/articles/1/comments")
                 .send(commentInput)
-                .expect(406)
+                .expect(400)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid content");
+                    expect(body.message).toBe("invalid input");
                 });
         });
-        test("status 406 - more than expected content on the post request ", () => {
+        test("status 400 - more than expected content on the post request ", () => {
             const commentInput = {
-                username: "notausername",
+                username: "icellusedkars",
                 body: "this is the test body",
                 votes: 100,
             };
             return request(app)
                 .post("/api/articles/1/comments")
                 .send(commentInput)
-                .expect(406)
+                .expect(400)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid content");
+                    expect(body.message).toBe("invalid input");
                 });
         });
     });

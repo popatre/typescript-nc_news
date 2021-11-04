@@ -107,21 +107,22 @@ exports.fetchArticleCommentsById = async (id) => {
     );
     if (rows.length === 0) {
         const commentRes = await db.query(
-            `SELECT * FROM comments WHERE article_id = $1;`,
+            `SELECT * FROM articles WHERE article_id = $1;`,
             [id]
         );
         if (commentRes.rows.length === 0) {
             return Promise.reject({ status: 404, msg: "no comments found" });
         }
     }
+
     return rows;
 };
 
-exports.addCommentById = async (id, username, body) => {
-    if (username === undefined || username.length === 0) {
+exports.addCommentById = async (id, username, body, reqLength) => {
+    if (username === undefined || username.length === 0 || reqLength > 2) {
         return Promise.reject({ status: 400, msg: "invalid input" });
     }
-    if (body === undefined || body.length === 0) {
+    if (body === undefined || body.length === 0 || typeof body !== "string") {
         return Promise.reject({ status: 400, msg: "invalid input" });
     }
     const { rows } = await db.query(
@@ -129,6 +130,16 @@ exports.addCommentById = async (id, username, body) => {
     VALUES ($1, $2, $3) RETURNING *;`,
         [body, username, id]
     );
+    if (rows.length === 0) {
+        const userQuery = await db.query(
+            `SELECT * FROM USERS WHERE username = $1;`,
+            [username]
+        );
+        console.log(userQuery);
+        if (userQuery.length === 0) {
+            return Promise.reject({ status: 404, msg: "username not found" });
+        }
+    }
     return rows[0];
 };
 
