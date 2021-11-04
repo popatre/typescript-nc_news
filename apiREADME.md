@@ -103,7 +103,9 @@ The following dependencies should have been installed:
 
 The server has the following endpoints,
 
-GET /api/topics, which serves a list of topics
+GET /api/topics which serves a list of topics
+
+POST /api/topics adds a new topic to the database
 
 GET /api/articles/:article_id, which responds with the article corresponding to the article_id passed in
 

@@ -45,7 +45,7 @@
     "PATCH /api/articles/:article_id": {
         "description": "serves an article object with the votes either incremented or decremented by the given patch object value",
         "queries": [],
-        "examplePatchObject": { "inc_votes": 10 },
+        "exampleRequest": { "inc_votes": 10 },
         "example response": {
             "article": [
                 {
@@ -79,7 +79,7 @@
     "POST /api/articles/:article_id/comments": {
         "description": "serves a new comment object with the article id chosen in the path",
         "queries": [],
-        "examplePostObject": {
+        "exampleRequest": {
             "username": "icellusedkars",
             "body": "This is the new comment"
         },
@@ -144,7 +144,7 @@
     "POST /api/articles": {
         "description": "adds a new article based on the topic inside the post object",
         "queries": [],
-        "examplePostObject": {
+        "exampleRequest": {
             "author": "currentuser/username",
             "title": "New Title",
             "body": "This is the body content",
@@ -160,6 +160,20 @@
                 "body": "This is the body content",
                 "created_at": "2021-11-11T13:18:53.414Z",
                 "comment_count": "0"
+            }
+        }
+    },
+    "POST /api/topics": {
+        "description": "adds a new topic to the database with the content requested",
+        "queries": [],
+        "exampleRequest": {
+            "slug": "New topic here",
+            "description": "description for the topic"
+        },
+        "exampleResponse": {
+            "topic": {
+                "slug": "New topic here",
+                "description": "description for the topic"
             }
         }
     }
