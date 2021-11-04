@@ -566,7 +566,7 @@ describe("/api", () => {
                 });
         });
     });
-    describe.only("POST /api/articles", () => {
+    describe("POST /api/articles", () => {
         test("status 201 - responds with newly added article with the correct properties", () => {
             const input = {
                 author: "icellusedkars",
@@ -667,6 +667,25 @@ describe("/api", () => {
                 .expect(400)
                 .then(({ body }) => {
                     expect(body.message).toBe("invalid input");
+                });
+        });
+    });
+    describe("POST /api/topics", () => {
+        test("status 201 - accepts object and responds with topic object containing new topic", () => {
+            const input = {
+                slug: "New Topic",
+                description: "This is the new description",
+            };
+            return request(app)
+                .post("/api/topics")
+                .send(input)
+                .expect(201)
+                .then(({ body }) => {
+                    const { topic } = body;
+                    expect(topic).toMatchObject({
+                        slug: "New Topic",
+                        description: "This is the new description",
+                    });
                 });
         });
     });
