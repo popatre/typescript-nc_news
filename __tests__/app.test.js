@@ -766,7 +766,7 @@ describe("/api", () => {
                     });
             });
         });
-        describe.only("/api/articles", () => {
+        describe("/api/articles", () => {
             test("status 405 - PATCH ", () => {
                 const input = {};
                 return request(app)
@@ -780,6 +780,39 @@ describe("/api", () => {
             test("status 405 - DELETE ", () => {
                 return request(app)
                     .delete("/api/articles")
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+        });
+        describe("/api/articles/:article_id", () => {
+            test("status 405 -POST ", () => {
+                const input = {};
+                return request(app)
+                    .post("/api/articles/1")
+                    .send(input)
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+        });
+        describe("/api/articles/:article_id/comments", () => {
+            test("status 405 - DELETE ", () => {
+                const input = {};
+                return request(app)
+                    .delete("/api/articles/1/comments")
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+            test("status 405 - PATCH", () => {
+                const input = {};
+                return request(app)
+                    .patch("/api/articles/1/comments")
+                    .send(input)
                     .expect(405)
                     .then(({ body }) => {
                         expect(body.message).toBe("bad method on this route");

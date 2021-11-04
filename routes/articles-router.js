@@ -15,9 +15,13 @@ articleRouter
     .route("/:article_id")
     .get(getArticleById)
     .patch(updateVotesById)
-    .delete(deleteArticleById);
-articleRouter.route("/:article_id/comments").get(getArticleCommentsById);
-articleRouter.route("/:article_id/comments").post(postCommentById);
+    .delete(deleteArticleById)
+    .all(methodNotAllowed);
+articleRouter
+    .route("/:article_id/comments")
+    .get(getArticleCommentsById)
+    .post(postCommentById)
+    .all(methodNotAllowed);
 articleRouter
     .route("/")
     .get(getAllArticles)
