@@ -766,5 +766,25 @@ describe("/api", () => {
                     });
             });
         });
+        describe.only("/api/articles", () => {
+            test("status 405 - PATCH ", () => {
+                const input = {};
+                return request(app)
+                    .patch("/api/articles")
+                    .send(input)
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+            test("status 405 - DELETE ", () => {
+                return request(app)
+                    .delete("/api/articles")
+                    .expect(405)
+                    .then(({ body }) => {
+                        expect(body.message).toBe("bad method on this route");
+                    });
+            });
+        });
     });
 });

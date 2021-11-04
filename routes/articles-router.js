@@ -8,6 +8,7 @@ const {
     deleteArticleById,
     postNewArticles,
 } = require("../controllers/article.controller");
+const { methodNotAllowed } = require("../controllers/errors.controller");
 const articleRouter = express.Router();
 
 articleRouter
@@ -17,6 +18,10 @@ articleRouter
     .delete(deleteArticleById);
 articleRouter.route("/:article_id/comments").get(getArticleCommentsById);
 articleRouter.route("/:article_id/comments").post(postCommentById);
-articleRouter.route("/").get(getAllArticles).post(postNewArticles);
+articleRouter
+    .route("/")
+    .get(getAllArticles)
+    .post(postNewArticles)
+    .all(methodNotAllowed);
 
 module.exports = articleRouter;
