@@ -591,5 +591,11 @@ describe("/api", () => {
                     });
                 });
         });
+        test.skip("status 400 - missing data from post object ", () => {});
+        test.skip("status 400 - missing keys from post object ", () => {});
+        test.skip("status 400 - extra keys on the post object ", () => {});
+        test.skip("status 400 - incorrect data type on post object ", () => {});
+        test.skip("status 400 - invalid username on post object ", () => {});
+        test.skip("status 400 - invalid topic on post object ", () => {});
     });
 });
