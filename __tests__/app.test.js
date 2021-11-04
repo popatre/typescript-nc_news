@@ -259,12 +259,12 @@ describe("/api", () => {
                     expect(body.articles).toHaveLength(1);
                 });
         });
-        test("status 400 - tries to filter by topic that doesnt exist ", () => {
+        test("status 404 - tries to filter by topic that doesnt exist ", () => {
             return request(app)
                 .get("/api/articles?topic=notatopic")
-                .expect(400)
+                .expect(404)
                 .then(({ body }) => {
-                    expect(body.message).toBe("invalid input");
+                    expect(body.message).toBe("topic not found");
                 });
         });
         test("status 200 - queries existing topic, but with no articles associated ", () => {

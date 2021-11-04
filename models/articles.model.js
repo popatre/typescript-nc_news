@@ -12,7 +12,13 @@ exports.fetchArticleById = async (id) => {
         [id]
     );
     if (rows.length === 0) {
-        return Promise.reject({ status: "404", msg: "article not found" });
+        const articleRes = await db.query(
+            `SELECT * FROM articles WHERE article_id = $1;`,
+            [id]
+        );
+        if (articleRes.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "article not found" });
+        }
     }
     return rows[0];
 };
@@ -40,6 +46,13 @@ exports.fetchAllArticles = async (
 
     const topicArr = [];
     if (topic) {
+        const topicExist = await db.query(
+            `SELECT * FROM topics WHERE slug = $1;`,
+            [topic]
+        );
+        if (topicExist.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "topic not found" });
+        }
         topicArr.push(topic);
         queryStr += `WHERE topic = $1 `;
     }
@@ -93,7 +106,13 @@ exports.fetchArticleCommentsById = async (id) => {
         [id]
     );
     if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "no comments found" });
+        const commentRes = await db.query(
+            `SELECT * FROM comments WHERE article_id = $1;`,
+            [id]
+        );
+        if (commentRes.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "no comments found" });
+        }
     }
     return rows;
 };
