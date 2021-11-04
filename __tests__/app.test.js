@@ -582,6 +582,16 @@ describe("/api", () => {
                     expect(body.message).toBe("invalid input");
                 });
         });
+        test("status 404 - patch to valid id, but doesnt exist in database ", () => {
+            const update = { inc_votes: 10 };
+            return request(app)
+                .patch("/api/comments/10000")
+                .send(update)
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toBe("comment not found");
+                });
+        });
     });
     describe("DELETE /api/articles/:article_id", () => {
         test("Status 204 - successfully deletes article by article id", () => {

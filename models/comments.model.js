@@ -38,5 +38,16 @@ exports.addVotesByCommentId = async (id, increment, reqLength) => {
     WHERE comment_id = $2 RETURNING *;`,
         [increment, id]
     );
+    if (rows.length === 0) {
+        const commentQuery = await db.query(
+            `SELECT * FROM comments WHERE comment_id = $1;`,
+            [id]
+        );
+        if (commentQuery.length === 0) {
+            return Promise.reject({ status: 400, msg: "invalid input" });
+        } else {
+            return Promise.reject({ status: 404, msg: "comment not found" });
+        }
+    }
     return rows[0];
 };
