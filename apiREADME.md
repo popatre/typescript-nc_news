@@ -107,6 +107,8 @@ GET /api/topics, which serves a list of topics
 
 GET /api/articles/:article_id, which responds with the article corresponding to the article_id passed in
 
+POST /api/articles adds a new article to the topic in the post object
+
 PATCH /api/articles/:article_id modifies the votes on the article in question
 
 DELETE /api/articles/:article_id deletes the article selected by its id

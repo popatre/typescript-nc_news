@@ -137,8 +137,30 @@
             }
         }
     },
-    "DELETE api/articles/:article_id": {
+    "DELETE /api/articles/:article_id": {
         "description": "deletes the articles by the requested id",
         "queries": []
+    },
+    "POST /api/articles": {
+        "description": "adds a new article based on the topic inside the post object",
+        "queries": [],
+        "examplePostObject": {
+            "author": "currentuser/username",
+            "title": "New Title",
+            "body": "This is the body content",
+            "topic": "An exisiting topic"
+        },
+        "exampleResponse": {
+            "article": {
+                "article_id": 13,
+                "title": "New Title",
+                "topic": "cats",
+                "author": "icellusedkars",
+                "votes": 0,
+                "body": "This is the body content",
+                "created_at": "2021-11-11T13:18:53.414Z",
+                "comment_count": "0"
+            }
+        }
     }
 }
