@@ -69,7 +69,7 @@ exports.fetchAllArticles = async (
     }
 
     queryStr += `GROUP BY articles.article_id 
-    ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset} `;
+    ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}  `;
 
     const { rows } = await db.query(queryStr, topicArr);
 
