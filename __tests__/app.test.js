@@ -174,14 +174,14 @@ describe("/api", () => {
                 });
         });
     });
-    describe("GET/api/articles", () => {
-        test("status 200 - responds with array of article objects, containing correct properties ", () => {
+    describe.only("GET/api/articles", () => {
+        test("status 200 - responds with array of article objects, containing correct properties - length 10 by default ", () => {
             return request(app)
                 .get("/api/articles")
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.articles).toBeInstanceOf(Array);
-                    expect(body.articles).toHaveLength(12);
+                    expect(body.articles).toHaveLength(10);
                     body.articles.forEach((article) => {
                         expect(article).toMatchObject({
                             author: expect.any(String),
@@ -193,6 +193,34 @@ describe("/api", () => {
                             comment_count: expect.any(String),
                         });
                     });
+                });
+        });
+        test("status 200 - responds with array of article objects, containing correct properties - accepting limit query ", () => {
+            return request(app)
+                .get("/api/articles?limit=5")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeInstanceOf(Array);
+                    expect(body.articles).toHaveLength(5);
+                    body.articles.forEach((article) => {
+                        expect(article).toMatchObject({
+                            author: expect.any(String),
+                            title: expect.any(String),
+                            article_id: expect.any(Number),
+                            topic: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 400 - bad limit query - not a valid number", () => {
+            return request(app)
+                .get("/api/articles?limit=not-a-number")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid limit query");
                 });
         });
         test("status 200 - returns articles sorted by date when no sorted param given ", () => {

@@ -28,7 +28,8 @@ exports.fetchArticleById = async (id) => {
 exports.fetchAllArticles = async (
     sort_by = "created_at",
     order = "desc",
-    topic
+    topic,
+    limit = 10
 ) => {
     if (
         !["title", "topic", "author", "body", "created_at", "votes"].includes(
@@ -39,6 +40,9 @@ exports.fetchAllArticles = async (
     }
     if (!["asc", "desc"].includes(order)) {
         return Promise.reject({ status: 400, msg: "invalid order query" });
+    }
+    if (isNaN(limit)) {
+        return Promise.reject({ status: 400, msg: "invalid limit query" });
     }
 
     let queryStr = `SELECT articles.*, COUNT (comments.article_id) AS comment_count
@@ -60,7 +64,7 @@ exports.fetchAllArticles = async (
     }
 
     queryStr += `GROUP BY articles.article_id 
-    ORDER BY ${sort_by} ${order}`;
+    ORDER BY ${sort_by} ${order} LIMIT ${limit}`;
 
     const { rows } = await db.query(queryStr, topicArr);
 
