@@ -34,7 +34,7 @@ To set up your own repository, please follow the instructions below
 
         cd nc_news
 
-3.  From here, you can open the directory in your source-code editor of choice e.g. visual-studio code, atom etc.
+3.  From here, you can open the directory in your source-code editor of choice e.g. visual-studio, atom etc.
 
 <br>
 
@@ -87,7 +87,7 @@ _If an error occurs, please ensure your have named/set up the .env files as stat
 
  <br>
 
-9.  To run the server locally, type the code below in your terminal. The terminal should confirm that it has started listening
+9.  To run the server locally, type the code below into your terminal. The terminal should confirm that it has started listening
 
         npm start
 
@@ -131,7 +131,7 @@ _The available routes and methods can be found below_
 
 # Testing
 
-The tests created can be found in the: <code> `__tests__/app.test.js` </code> directory
+The tests created can be found in the: `__tests__/app.test.js` directory
 
 To run the testing suite, type the code below in your terminal
 

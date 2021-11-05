@@ -615,6 +615,14 @@ describe("/api", () => {
                     expect(body.message).toBe("article not found");
                 });
         });
+        test("Status 400 - requests to delete article by invalid id", () => {
+            return request(app)
+                .delete("/api/articles/not-an-id")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid request");
+                });
+        });
     });
     describe("POST /api/articles", () => {
         test("status 201 - responds with newly added article with the correct properties", () => {
