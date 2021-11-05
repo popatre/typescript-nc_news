@@ -7,7 +7,6 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 const app = require("../app");
-const e = require("express");
 
 describe("/api", () => {
     test("status 404 - not a route/path ", () => {
