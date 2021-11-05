@@ -97,7 +97,7 @@
         }
     },
     "GET /api/comments": {
-        "description": "serves an array of objects containing all comments",
+        "description": "serves an array of objects containing all comments - limited to 10 by default unless limit query used",
         "queries": ["limit", "p"],
         "exampleResponse": {
             "comments": [
