@@ -111,10 +111,19 @@ exports.incrementVotesById = async (id, increment, reqLength) => {
     return rows[0];
 };
 
-exports.fetchArticleCommentsById = async (id) => {
+exports.fetchArticleCommentsById = async (id, limit = 10, p = 1) => {
+    const offset = (p - 1) * limit;
+    console.log(offset);
+    if (isNaN(limit)) {
+        return Promise.reject({ status: 400, msg: "invalid limit query" });
+    }
+    if (isNaN(p)) {
+        return Promise.reject({ status: 400, msg: "invalid page query" });
+    }
+
     const { rows } = await db.query(
-        "SELECT * FROM comments WHERE article_id = $1;",
-        [id]
+        "SELECT * FROM comments WHERE article_id = $1 LIMIT $2 OFFSET $3;",
+        [id, limit, offset]
     );
     if (rows.length === 0) {
         const commentRes = await db.query(

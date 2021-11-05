@@ -16,8 +16,19 @@ exports.removeCommentById = async (id) => {
     return deleted;
 };
 
-exports.fetchAllComments = async () => {
-    const { rows } = await db.query(`SELECT * FROM comments`);
+exports.fetchAllComments = async (limit = 10, p = 1) => {
+    const offset = (p - 1) * limit;
+
+    if (isNaN(limit)) {
+        return Promise.reject({ status: 400, msg: "invalid limit query" });
+    }
+    if (isNaN(offset)) {
+        return Promise.reject({ status: 400, msg: "invalid page query" });
+    }
+    const { rows } = await db.query(
+        `SELECT * FROM comments LIMIT $1 OFFSET $2;`,
+        [limit, offset]
+    );
     return rows;
 };
 exports.addVotesByCommentId = async (id, increment, reqLength) => {

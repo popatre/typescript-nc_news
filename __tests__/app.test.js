@@ -353,13 +353,13 @@ describe("/api", () => {
         });
     });
     describe("GET/api/articles/:article_id/comments", () => {
-        test("status 200 - responds with an array of comment for the article requested ", () => {
+        test("status 200 - responds with an array of comment for the article requested - defaults to 10 results ", () => {
             return request(app)
                 .get("/api/articles/1/comments")
                 .expect(200)
                 .then(({ body }) => {
                     expect(body.comments).toBeInstanceOf(Array);
-                    expect(body.comments).toHaveLength(11);
+                    expect(body.comments).toHaveLength(10);
                     body.comments.forEach((comment) => {
                         expect(comment).toMatchObject({
                             comment_id: expect.any(Number),
@@ -369,6 +369,76 @@ describe("/api", () => {
                             body: expect.any(String),
                         });
                     });
+                });
+        });
+        test("status 200 - accepts limit query ", () => {
+            return request(app)
+                .get("/api/articles/1/comments?limit=5")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                    expect(body.comments).toHaveLength(5);
+                    body.comments.forEach((comment) => {
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 200 - accepts p query and limit ", () => {
+            return request(app)
+                .get("/api/articles/1/comments?limit=5&&p=3")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                    expect(body.comments).toHaveLength(1);
+                    body.comments.forEach((comment) => {
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 200 - accepts p query ", () => {
+            return request(app)
+                .get("/api/articles/1/comments?p=2")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.comments).toBeInstanceOf(Array);
+                    expect(body.comments).toHaveLength(1);
+                    body.comments.forEach((comment) => {
+                        expect(comment).toMatchObject({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 400 - bad limit query/not a number ", () => {
+            return request(app)
+                .get("/api/articles/1/comments?limit=not-a-number")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid limit query");
+                });
+        });
+        test("status 400 - bad page query/not a number ", () => {
+            return request(app)
+                .get("/api/articles/1/comments?p=not-a-number")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid page query");
                 });
         });
         test("status 404 - requests comments from an article that does not exist ", () => {
@@ -487,7 +557,7 @@ describe("/api", () => {
                         .get("/api/comments")
                         .expect(200)
                         .then(({ body }) => {
-                            expect(body.comments).toHaveLength(17);
+                            expect(body.comments).toHaveLength(10);
                         });
                 });
         });

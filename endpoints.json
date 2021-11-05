@@ -98,7 +98,7 @@
     },
     "GET /api/comments": {
         "description": "serves an array of objects containing all comments",
-        "queries": [],
+        "queries": ["limit", "p"],
         "exampleResponse": {
             "comments": [
                 {

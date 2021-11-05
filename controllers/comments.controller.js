@@ -15,8 +15,9 @@ exports.deleteByCommentId = async (req, res, next) => {
 };
 
 exports.getAllComments = async (req, res, next) => {
+    const { limit, p } = req.query;
     try {
-        const comments = await fetchAllComments();
+        const comments = await fetchAllComments(limit, p);
         res.status(200).send({ comments });
     } catch (err) {
         next(err);

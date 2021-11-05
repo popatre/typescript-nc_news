@@ -53,9 +53,10 @@ exports.updateVotesById = async (req, res, next) => {
 };
 
 exports.getArticleCommentsById = async (req, res, next) => {
+    const { limit, p } = req.query;
     const { article_id } = req.params;
     try {
-        const comments = await fetchArticleCommentsById(article_id);
+        const comments = await fetchArticleCommentsById(article_id, limit, p);
 
         res.status(200).send({ comments });
     } catch (err) {
