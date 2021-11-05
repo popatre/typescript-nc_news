@@ -29,8 +29,10 @@ exports.fetchAllArticles = async (
     sort_by = "created_at",
     order = "desc",
     topic,
-    limit = 10
+    limit = 10,
+    p = 1
 ) => {
+    const offset = (p - 1) * limit;
     if (
         !["title", "topic", "author", "body", "created_at", "votes"].includes(
             sort_by
@@ -43,6 +45,9 @@ exports.fetchAllArticles = async (
     }
     if (isNaN(limit)) {
         return Promise.reject({ status: 400, msg: "invalid limit query" });
+    }
+    if (isNaN(offset)) {
+        return Promise.reject({ status: 400, msg: "invalid page query" });
     }
 
     let queryStr = `SELECT articles.*, COUNT (comments.article_id) AS comment_count
@@ -64,7 +69,7 @@ exports.fetchAllArticles = async (
     }
 
     queryStr += `GROUP BY articles.article_id 
-    ORDER BY ${sort_by} ${order} LIMIT ${limit}`;
+    ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset} `;
 
     const { rows } = await db.query(queryStr, topicArr);
 

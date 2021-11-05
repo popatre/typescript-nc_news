@@ -174,7 +174,7 @@ describe("/api", () => {
                 });
         });
     });
-    describe.only("GET/api/articles", () => {
+    describe("GET/api/articles", () => {
         test("status 200 - responds with array of article objects, containing correct properties - length 10 by default ", () => {
             return request(app)
                 .get("/api/articles")
@@ -213,6 +213,54 @@ describe("/api", () => {
                             comment_count: expect.any(String),
                         });
                     });
+                });
+        });
+        test("status 200 - responds with array of article objects, containing correct properties - accepting p query ", () => {
+            return request(app)
+                .get("/api/articles?p=2")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeInstanceOf(Array);
+                    expect(body.articles).toHaveLength(2);
+                    body.articles.forEach((article) => {
+                        expect(article).toMatchObject({
+                            author: expect.any(String),
+                            title: expect.any(String),
+                            article_id: expect.any(Number),
+                            topic: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 200 - accepts both page and limit query, responding with correct length page and limit ", () => {
+            return request(app)
+                .get("/api/articles?limit=5&&p=3")
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body.articles).toBeInstanceOf(Array);
+                    expect(body.articles).toHaveLength(2);
+                    body.articles.forEach((article) => {
+                        expect(article).toMatchObject({
+                            author: expect.any(String),
+                            title: expect.any(String),
+                            article_id: expect.any(Number),
+                            topic: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(String),
+                        });
+                    });
+                });
+        });
+        test("status 400 - bad p query input ", () => {
+            return request(app)
+                .get("/api/articles?p=not-a-number")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).toBe("invalid page query");
                 });
         });
         test("status 400 - bad limit query - not a valid number", () => {
@@ -631,7 +679,7 @@ describe("/api", () => {
                         .get("/api/articles")
                         .expect(200)
                         .then(({ body }) => {
-                            expect(body.articles).toHaveLength(11);
+                            expect(body.articles).toHaveLength(10);
                         });
                 });
         });
