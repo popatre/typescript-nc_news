@@ -82,7 +82,7 @@ exports.fetchAllArticles = async (
             return Promise.reject({ status: 400, msg: "invalid input" });
         }
     }
-
+    console.log(rows);
     return rows;
 };
 
