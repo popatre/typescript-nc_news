@@ -10,7 +10,7 @@
         }
     },
     "GET /api/articles": {
-        "description": "serves an array of all topics",
+        "description": "serves an array of all articles",
         "queries": ["topic", "sort_by", "order", "limit", "p"],
         "exampleResponse": {
             "articles": [
@@ -126,7 +126,7 @@
             ]
         }
     },
-    "GET /api/users:username": {
+    "GET /api/users/:username": {
         "descripton": "serves an objects containing the details of the username requested",
         "queries": [],
         "exampleResponse": {
