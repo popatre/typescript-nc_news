@@ -34,9 +34,15 @@ exports.fetchAllArticles = async (
 ) => {
     const offset = (p - 1) * limit;
     if (
-        !["title", "topic", "author", "body", "created_at", "votes"].includes(
-            sort_by
-        )
+        ![
+            "title",
+            "topic",
+            "author",
+            "body",
+            "created_at",
+            "votes",
+            "comment_count",
+        ].includes(sort_by)
     ) {
         return Promise.reject({ status: 400, msg: "invalid sort query" });
     }
