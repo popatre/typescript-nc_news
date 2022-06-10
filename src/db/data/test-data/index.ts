@@ -1,4 +1,4 @@
-export { articleData } from "./articles.js";
-export { commentData } from "./comments.js";
-export { topicData } from "./topics.js";
-export { userData } from "./users.js";
+export { articleData } from "./articles";
+export { commentData } from "./comments";
+export { topicData } from "./topics";
+export { userData } from "./users";
