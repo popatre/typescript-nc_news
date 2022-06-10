@@ -1,8 +1,15 @@
-const db = require("../index");
+import db from "../index";
 
-const format = require("pg-format");
+import format from "pg-format";
 
-const seed = (data) => {
+type SeedData = {
+    articleData: { [key: string]: number | string | Date }[];
+    commentData: { [key: string]: number | string | Date }[];
+    topicData: { [key: string]: number | string | Date }[];
+    userData: { [key: string]: number | string | Date }[];
+};
+
+const seed = (data: SeedData) => {
     const { articleData, commentData, topicData, userData } = data;
     return db
         .query(`DROP TABLE IF EXISTS comments;`)
@@ -58,7 +65,7 @@ const seed = (data) => {
                 `INSERT INTO topics (slug, description)
                         VALUES %L;`,
                 topicData.map((topics) => {
-                    return [topics.slug, topics.description];
+                    return [topics["slug"], topics["description"]];
                 })
             );
             return db.query(queryTopics);
@@ -70,7 +77,7 @@ const seed = (data) => {
           INSERT INTO users (username, avatar_url, name)
           VALUES %L;`,
                 userData.map((user) => {
-                    return [user.username, user.avatar_url, user.name];
+                    return [user["username"], user["avatar_url"], user["name"]];
                 })
             );
             return db.query(queryUsers);
@@ -83,12 +90,12 @@ const seed = (data) => {
           VALUES %L;`,
                 articleData.map((article) => {
                     return [
-                        article.title,
-                        article.topic,
-                        article.author,
-                        article.body,
-                        article.created_at,
-                        article.votes,
+                        article["title"],
+                        article["topic"],
+                        article["author"],
+                        article["body"],
+                        article["created_at"],
+                        article["votes"],
                     ];
                 })
             );
@@ -102,11 +109,11 @@ const seed = (data) => {
           VALUES %L;`,
                 commentData.map((comment) => {
                     return [
-                        comment.body,
-                        comment.votes,
-                        comment.author,
-                        comment.article_id,
-                        comment.created_at,
+                        comment["body"],
+                        comment["votes"],
+                        comment["author"],
+                        comment["article_id"],
+                        comment["created_at"],
                     ];
                 })
             );
@@ -114,4 +121,4 @@ const seed = (data) => {
         });
 };
 
-module.exports = seed;
+export default seed;
