@@ -54,3 +54,24 @@ describe("/api/topics", () => {
             });
     });
 });
+
+describe("/api/articles:id", () => {
+    it("status 200: returns correct articles from id requested", () => {
+        return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isObject(body.article);
+                expect(body.article).to.include.all.keys(
+                    "title",
+                    "topic",
+                    "author",
+                    "body",
+                    "created_at",
+                    "votes",
+                    "article_id"
+                );
+                expect(body.article.article_id).to.eql(1);
+            });
+    });
+});
