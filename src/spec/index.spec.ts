@@ -69,9 +69,11 @@ describe("/api/articles:id", () => {
                     "body",
                     "created_at",
                     "votes",
-                    "article_id"
+                    "article_id",
+                    "comment_count"
                 );
                 expect(body.article.article_id).to.eql(1);
+                expect(body.article.comment_count).to.eql(11);
             });
     });
     describe("Errors", () => {
