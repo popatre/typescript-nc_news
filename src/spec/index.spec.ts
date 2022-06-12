@@ -129,4 +129,12 @@ describe("/api/users/:username", () => {
                 expect(body.user.username).to.eql("rogersop");
             });
     });
+    it("status 404 - username not found", () => {
+        return request(app)
+            .get("/api/users/notausername")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Username not found");
+            });
+    });
 });
