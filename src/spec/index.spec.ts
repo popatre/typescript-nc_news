@@ -12,7 +12,7 @@ after(() => db.end());
 describe("/articles", () => {
     it("status 200: returns all articles", () => {
         return request(app)
-            .get("/articles")
+            .get("/api/articles")
             .expect(200)
             .then(({ body }) => {
                 assert.isArray(body.articles);
@@ -24,17 +24,9 @@ describe("/articles", () => {
                         "author",
                         "body",
                         "created_at",
-                        "votes"
+                        "votes",
+                        "comment_count"
                     );
-                    expect(body.articles[0]).to.include({
-                        article_id: 1,
-                        title: "Living in the shadow of a great man",
-                        body: "I find this existence challenging",
-                        votes: 100,
-                        topic: "mitch",
-                        author: "butter_bridge",
-                        created_at: "2020-07-09 21:11:00.000+00",
-                    });
                 });
             });
     });

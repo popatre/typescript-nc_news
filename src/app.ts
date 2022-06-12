@@ -1,9 +1,10 @@
 import express from "express";
 import { getAllArticles } from "./controllers/articles.controller";
+import apiRouter from "./routers/api.router";
 const app = express();
 const cors = require("cors");
 app.use(cors());
 
-app.get("/articles", getAllArticles);
+app.use("/api", apiRouter);
 
 export default app;
