@@ -30,4 +30,12 @@ describe("/articles", () => {
                 });
             });
     });
+    it("status 404 - general route not found", () => {
+        return request(app)
+            .get("/api/notfound")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Route not found");
+            });
+    });
 });
