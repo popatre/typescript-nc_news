@@ -1,5 +1,5 @@
 import express from "express";
-import { fetchAllUsers } from "../model/users.model";
+import { fetchAllUsers, fetchUserByUsername } from "../model/users.model";
 
 export type User = {
     username: string;
@@ -13,5 +13,15 @@ export const getAllUsers: express.RequestHandler<{}, { users: User[] }> = (
 ) => {
     fetchAllUsers().then((users) => {
         res.status(200).send({ users });
+    });
+};
+
+export const getUserByUsername: express.RequestHandler<
+    { username: string },
+    { user: User }
+> = (req, res) => {
+    const { username } = req.params;
+    fetchUserByUsername(username).then((user) => {
+        res.status(200).send({ user });
     });
 };

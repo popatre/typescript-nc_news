@@ -114,3 +114,19 @@ describe("/api/users", () => {
             });
     });
 });
+describe("/api/users/:username", () => {
+    it("status 200 -  returns all users", () => {
+        return request(app)
+            .get("/api/users/rogersop")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isObject(body.user);
+                expect(body.user).to.include.all.keys(
+                    "username",
+                    "name",
+                    "avatar_url"
+                );
+                expect(body.user.username).to.eql("rogersop");
+            });
+    });
+});
