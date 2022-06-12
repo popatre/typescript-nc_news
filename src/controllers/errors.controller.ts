@@ -19,7 +19,7 @@ export const errors400: express.ErrorRequestHandler<{}, { msg: string }> = (
     } else next(err);
 };
 
-export const psqlErrors: express.ErrorRequestHandler<{}, { msg: string }> = (
+export const psqlErrors: express.ErrorRequestHandler<{}, {}> = (
     err,
     req,
     res,

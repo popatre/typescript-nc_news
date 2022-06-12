@@ -93,3 +93,22 @@ describe("/api/articles:id", () => {
         });
     });
 });
+
+describe("/api/users", () => {
+    it("status 200 -  returns all users", () => {
+        return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.users);
+                expect(body.users).to.have.lengthOf(4);
+                body.users.forEach((article: {}) => {
+                    expect(article).to.include.all.keys(
+                        "username",
+                        "name",
+                        "avatar_url"
+                    );
+                });
+            });
+    });
+});
