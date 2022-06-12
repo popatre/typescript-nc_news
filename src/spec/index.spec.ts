@@ -83,5 +83,13 @@ describe("/api/articles:id", () => {
                     expect(body.msg).to.eql("Article not found");
                 });
         });
+        it("status 400 - bad article id type", () => {
+            return request(app)
+                .get("/api/articles/badtype")
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.msg).to.eql("Bad request");
+                });
+        });
     });
 });

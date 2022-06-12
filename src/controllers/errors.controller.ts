@@ -18,3 +18,14 @@ export const errors400: express.ErrorRequestHandler<{}, { msg: string }> = (
         res.status(err.status).send({ msg: err.msg });
     } else next(err);
 };
+
+export const psqlErrors: express.ErrorRequestHandler<{}, { msg: string }> = (
+    err,
+    req,
+    res,
+    next
+) => {
+    if (err.code === "22P02") {
+        res.status(400).send({ msg: "Bad request" });
+    }
+};
