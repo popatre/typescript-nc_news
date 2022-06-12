@@ -74,4 +74,14 @@ describe("/api/articles:id", () => {
                 expect(body.article.article_id).to.eql(1);
             });
     });
+    describe("Errors", () => {
+        it("status 404 - article not found", () => {
+            return request(app)
+                .get("/api/articles/999999")
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.msg).to.eql("Article not found");
+                });
+        });
+    });
 });
