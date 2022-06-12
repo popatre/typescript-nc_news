@@ -39,3 +39,18 @@ describe("/articles", () => {
             });
     });
 });
+
+describe("/api/topics", () => {
+    it("status 200 - returns all topics", () => {
+        return request(app)
+            .get("/api/topics")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.topics);
+                expect(body.topics).to.have.lengthOf(3);
+                body.topics.forEach((article: {}) => {
+                    expect(article).to.include.all.keys("description", "slug");
+                });
+            });
+    });
+});
