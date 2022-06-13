@@ -236,4 +236,12 @@ describe("DELETE /api/comments/:comment_id", () => {
     it("status 204: deleted comments from id", () => {
         return request(app).delete("/api/comments/1").expect(204);
     });
+    it("status 404: id not found to delete", () => {
+        return request(app)
+            .delete("/api/comments/9999999")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Id not found");
+            });
+    });
 });
