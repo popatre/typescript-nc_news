@@ -29,3 +29,20 @@ export const fetchArticleById: (article_id: string) => Promise<Article> = (
             return rows[0];
         });
 };
+
+export const addNewVoteByArticleId: (
+    articleId: string,
+    votes: number
+) => Promise<Article> = (articleId, votes) => {
+    console.log("*******");
+
+    return db
+        .query(
+            `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+            [votes, articleId]
+        )
+        .then(({ rows }: { rows: Article[] }) => {
+            console.log(rows[0]);
+            return rows[0];
+        });
+};

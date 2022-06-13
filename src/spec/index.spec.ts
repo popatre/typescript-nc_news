@@ -9,7 +9,7 @@ import db from "../db/index";
 beforeEach(() => seed(testData));
 after(() => db.end());
 
-describe("/articles", () => {
+describe("GET /articles", () => {
     it("status 200: returns all articles", () => {
         return request(app)
             .get("/api/articles")
@@ -40,7 +40,7 @@ describe("/articles", () => {
     });
 });
 
-describe("/api/topics", () => {
+describe("GET /api/topics", () => {
     it("status 200 - returns all topics", () => {
         return request(app)
             .get("/api/topics")
@@ -55,7 +55,7 @@ describe("/api/topics", () => {
     });
 });
 
-describe("/api/articles:id", () => {
+describe("GET /api/articles:id", () => {
     it("status 200: returns correct articles from id requested", () => {
         return request(app)
             .get("/api/articles/1")
@@ -96,7 +96,7 @@ describe("/api/articles:id", () => {
     });
 });
 
-describe("/api/users", () => {
+describe("GET /api/users", () => {
     it("status 200 -  returns all users", () => {
         return request(app)
             .get("/api/users")
@@ -114,7 +114,7 @@ describe("/api/users", () => {
             });
     });
 });
-describe("/api/users/:username", () => {
+describe("GET /api/users/:username", () => {
     it("status 200 -  returns all users", () => {
         return request(app)
             .get("/api/users/rogersop")
@@ -135,6 +135,38 @@ describe("/api/users/:username", () => {
             .expect(404)
             .then(({ body }) => {
                 expect(body.msg).to.eql("Username not found");
+            });
+    });
+    it("status 404 - username not found - username beginning with number", () => {
+        return request(app)
+            .get("/api/users/99allstars")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Username not found");
+            });
+    });
+});
+
+describe.only("PATCH /api/articles/:article_id", () => {
+    it("status 200: increments article requested votes, responds with patched object", () => {
+        const patchObj = { inc_votes: 10 };
+        return request(app)
+            .patch("/api/articles/1")
+            .send(patchObj)
+            .expect(200)
+            .then(({ body }) => {
+                assert.isObject(body.article);
+                expect(body.article).to.include.all.keys(
+                    "title",
+                    "topic",
+                    "author",
+                    "body",
+                    "created_at",
+                    "votes",
+                    "article_id"
+                );
+                expect(body.article.article_id).to.eql(1);
+                expect(body.article.votes).to.eql(110);
             });
     });
 });

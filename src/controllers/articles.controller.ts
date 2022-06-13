@@ -1,5 +1,9 @@
 import express from "express";
-import { fetchAllArticles, fetchArticleById } from "../model/articles.model";
+import {
+    addNewVoteByArticleId,
+    fetchAllArticles,
+    fetchArticleById,
+} from "../model/articles.model";
 import { Request, Response } from "express";
 export type Article = {
     title: string;
@@ -31,4 +35,17 @@ export const getArticleById: express.RequestHandler<
             res.status(200).send({ article });
         })
         .catch(next);
+};
+
+export const patchNewVote: express.RequestHandler<
+    { article_id: string },
+    { article: Article },
+    { inc_votes: number }
+> = (req, res) => {
+    const { article_id } = req.params;
+    const { inc_votes } = req.body;
+
+    addNewVoteByArticleId(article_id, inc_votes).then((article) => {
+        res.status(200).send({ article });
+    });
 };
