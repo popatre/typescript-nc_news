@@ -253,3 +253,24 @@ describe("DELETE /api/comments/:comment_id", () => {
             });
     });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+    it("status 201: posts comment to article, returning new post", () => {
+        const postObj = { username: "rogersop", body: "Test body" };
+        return request(app)
+            .post("/api/articles/1/comments")
+            .send(postObj)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.comment).to.include.all.keys(
+                    "body",
+                    "votes",
+                    "author",
+                    "article_id",
+                    "created_at",
+                    "comment_id"
+                );
+                expect(body.comment.article_id).to.eql(1);
+            });
+    });
+});

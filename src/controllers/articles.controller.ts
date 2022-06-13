@@ -5,6 +5,7 @@ import {
     fetchArticleById,
 } from "../model/articles.model";
 import { Request, Response } from "express";
+
 export type Article = {
     title: string;
     topic: string;
@@ -13,7 +14,10 @@ export type Article = {
     created_at: Date;
     votes: number;
     comment_count: number;
+    article_id: number;
 };
+
+export type Comment = Omit<Article, "topic" | "title" | "comment_count">;
 
 export const getAllArticles: express.RequestHandler<
     Request,
@@ -50,4 +54,11 @@ export const patchNewVote: express.RequestHandler<
             res.status(200).send({ article });
         })
         .catch(next);
+};
+
+export const postCommentByArticleId: express.RequestHandler<
+    { article_id: string },
+    { comment: Comment }
+> = (req, res, next) => {
+    const { article_id } = req.params;
 };
