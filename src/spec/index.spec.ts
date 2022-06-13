@@ -210,7 +210,7 @@ describe("PATCH /api/articles/:article_id", () => {
                 expect(body.msg).to.eql("Bad request");
             });
     });
-    it.only("status 400: patch object missing keys", () => {
+    it("status 400: patch object missing keys", () => {
         const patchObj = { inc_vot: 10 };
         return request(app)
             .patch("/api/articles/1")
@@ -229,5 +229,11 @@ describe("PATCH /api/articles/:article_id", () => {
             .then(({ body }) => {
                 expect(body.msg).to.eql("Bad request");
             });
+    });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+    it("status 204: deleted comments from id", () => {
+        return request(app).delete("/api/comments/1").expect(204);
     });
 });
