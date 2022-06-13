@@ -41,11 +41,13 @@ export const patchNewVote: express.RequestHandler<
     { article_id: string },
     { article: Article },
     { inc_votes: number }
-> = (req, res) => {
+> = (req, res, next) => {
     const { article_id } = req.params;
     const { inc_votes } = req.body;
 
-    addNewVoteByArticleId(article_id, inc_votes).then((article) => {
-        res.status(200).send({ article });
-    });
+    addNewVoteByArticleId(article_id, inc_votes)
+        .then((article) => {
+            res.status(200).send({ article });
+        })
+        .catch(next);
 };

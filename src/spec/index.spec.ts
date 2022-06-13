@@ -147,7 +147,7 @@ describe("GET /api/users/:username", () => {
     });
 });
 
-describe.only("PATCH /api/articles/:article_id", () => {
+describe("PATCH /api/articles/:article_id", () => {
     it("status 200: increments article requested votes, responds with patched object", () => {
         const patchObj = { inc_votes: 10 };
         return request(app)
@@ -167,6 +167,67 @@ describe.only("PATCH /api/articles/:article_id", () => {
                 );
                 expect(body.article.article_id).to.eql(1);
                 expect(body.article.votes).to.eql(110);
+            });
+    });
+    it("status 200: decrements article requested votes, responds with patched object", () => {
+        const patchObj = { inc_votes: -10 };
+        return request(app)
+            .patch("/api/articles/1")
+            .send(patchObj)
+            .expect(200)
+            .then(({ body }) => {
+                assert.isObject(body.article);
+                expect(body.article).to.include.all.keys(
+                    "title",
+                    "topic",
+                    "author",
+                    "body",
+                    "created_at",
+                    "votes",
+                    "article_id"
+                );
+                expect(body.article.article_id).to.eql(1);
+                expect(body.article.votes).to.eql(90);
+            });
+    });
+    it("status 404: patch to not found article id", () => {
+        const patchObj = { inc_votes: 10 };
+        return request(app)
+            .patch("/api/articles/999999")
+            .send(patchObj)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Article not found");
+            });
+    });
+    it("status 400: patch to bad article id", () => {
+        const patchObj = { inc_votes: 10 };
+        return request(app)
+            .patch("/api/articles/badId")
+            .send(patchObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+    it.only("status 400: patch object missing keys", () => {
+        const patchObj = { inc_vot: 10 };
+        return request(app)
+            .patch("/api/articles/1")
+            .send(patchObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Missing object keys");
+            });
+    });
+    it("status 400: patch object wrong data type", () => {
+        const patchObj = { inc_votes: "wrong data" };
+        return request(app)
+            .patch("/api/articles/1")
+            .send(patchObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
             });
     });
 });

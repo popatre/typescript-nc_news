@@ -34,7 +34,9 @@ export const addNewVoteByArticleId: (
     articleId: string,
     votes: number
 ) => Promise<Article> = (articleId, votes) => {
-    console.log("*******");
+    if (votes == null) {
+        return Promise.reject({ status: 400, msg: "Missing object keys" });
+    }
 
     return db
         .query(
@@ -42,7 +44,12 @@ export const addNewVoteByArticleId: (
             [votes, articleId]
         )
         .then(({ rows }: { rows: Article[] }) => {
-            console.log(rows[0]);
+            if (!rows.length) {
+                return Promise.reject({
+                    status: 404,
+                    msg: "Article not found",
+                });
+            }
             return rows[0];
         });
 };
