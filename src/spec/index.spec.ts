@@ -244,4 +244,12 @@ describe("DELETE /api/comments/:comment_id", () => {
                 expect(body.msg).to.eql("Id not found");
             });
     });
+    it("status 400: bad id to delete", () => {
+        return request(app)
+            .delete("/api/comments/notAnId")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
 });
