@@ -79,3 +79,13 @@ export const addCommentByArticleId: (
             return rows[0];
         });
 };
+
+export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
+    articleId
+) => {
+    return db
+        .query(`SELECT * from comments WHERE article_id = $1`, [articleId])
+        .then(({ rows }: { rows: Comment[] }) => {
+            return rows;
+        });
+};

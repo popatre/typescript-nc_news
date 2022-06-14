@@ -314,3 +314,26 @@ describe("POST /api/articles/:article_id/comments", () => {
             });
     });
 });
+
+describe.only("GET  /api/articles/:article_id/comments", () => {
+    it("status 200: returns an array of comment for requested article id", () => {
+        return request(app)
+            .get("/api/articles/1/comments")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.comments);
+                expect(body.comments).to.have.length(11);
+                expect(body.comments[0].article_id).to.eql(1);
+                body.comments.forEach((comment: {}) => {
+                    expect(comment).to.include.all.keys(
+                        "body",
+                        "votes",
+                        "author",
+                        "article_id",
+                        "created_at",
+                        "comment_id"
+                    );
+                });
+            });
+    });
+});

@@ -4,6 +4,7 @@ import {
     addNewVoteByArticleId,
     fetchAllArticles,
     fetchArticleById,
+    fetchCommentsById,
 } from "../model/articles.model";
 import { Request, Response } from "express";
 
@@ -69,4 +70,14 @@ export const postCommentByArticleId: express.RequestHandler<
             res.status(201).send({ comment });
         })
         .catch(next);
+};
+
+export const getCommentsById: express.RequestHandler<
+    { article_id: number },
+    { comments: Comment[] }
+> = (req, res, next) => {
+    const { article_id } = req.params;
+    fetchCommentsById(article_id).then((comments) => {
+        res.status(200).send({ comments });
+    });
 };
