@@ -1,8 +1,6 @@
 export const checkIsValidQuery = (
     greenList: string[],
     wordToCheck: string
-): Promise<{ status: number; msg: string }> | boolean => {
-    console.log("in here");
-
+): boolean => {
     return greenList.includes(wordToCheck);
 };
