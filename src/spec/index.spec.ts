@@ -273,4 +273,14 @@ describe.only("POST /api/articles/:article_id/comments", () => {
                 expect(body.comment.article_id).to.eql(1);
             });
     });
+    it("status 404: article id not found", () => {
+        const postObj = { username: "rogersop", body: "Test body" };
+        return request(app)
+            .post("/api/articles/9999999/comments")
+            .send(postObj)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Article not found");
+            });
+    });
 });
