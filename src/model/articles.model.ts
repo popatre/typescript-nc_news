@@ -55,10 +55,21 @@ export const addNewVoteByArticleId: (
 };
 
 export const addCommentByArticleId: (
-    article_id: string,
+    article_id: number,
     username: string,
     body: string
 ) => Promise<Comment> = (articleId, body, username) => {
+    if (body == null || username == null) {
+        return Promise.reject({ status: 400, msg: "Missing post body keys" });
+    }
+
+    if (typeof body !== "string" || typeof username !== "string") {
+        return Promise.reject({
+            status: 400,
+            msg: "Post values must be strings",
+        });
+    }
+
     return db
         .query(
             `INSERT INTO comments(body, author, article_id) VALUES ($1, $2, $3) RETURNING *`,

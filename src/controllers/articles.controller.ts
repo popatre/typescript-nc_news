@@ -58,7 +58,7 @@ export const patchNewVote: express.RequestHandler<
 };
 
 export const postCommentByArticleId: express.RequestHandler<
-    { article_id: string },
+    { article_id: number },
     { comment: Comment },
     { username: string; body: string }
 > = (req, res, next) => {
