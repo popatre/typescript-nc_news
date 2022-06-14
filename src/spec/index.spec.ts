@@ -30,6 +30,52 @@ describe("GET /articles", () => {
                 });
             });
     });
+    it("status 200: returns all articles sorted by date as default", () => {
+        return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(12);
+                expect(body.articles[0].article_id).to.eql(3);
+            });
+    });
+    it("status 200: sorts by query in path", () => {
+        return request(app)
+            .get("/api/articles?sort_by=votes")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(12);
+                expect(body.articles[0].article_id).to.eql(1);
+            });
+    });
+    it.only("status 400: bad sort_by query value", () => {
+        return request(app)
+            .get("/api/articles?sort_by=badSortBy")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Invalid sort query");
+            });
+    });
+    it("status 200: orders by order query", () => {
+        return request(app)
+            .get("/api/articles?order=ASC")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(12);
+                expect(body.articles[0].article_id).to.eql(7);
+            });
+    });
+    it("status 400: invalid order query", () => {
+        return request(app)
+            .get("/api/articles?order=invalid")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Invalid order query");
+            });
+    });
     it("status 404 - general route not found", () => {
         return request(app)
             .get("/api/notfound")
@@ -315,7 +361,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     });
 });
 
-describe.only("GET  /api/articles/:article_id/comments", () => {
+describe("GET  /api/articles/:article_id/comments", () => {
     it("status 200: returns an array of comment for requested article id", () => {
         return request(app)
             .get("/api/articles/1/comments")

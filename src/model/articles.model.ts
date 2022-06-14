@@ -1,10 +1,34 @@
 import { Article, Comment } from "../controllers/articles.controller";
 import db from "../db/index";
+import { checkIsValidQuery } from "../utils/utils";
 
-export const fetchAllArticles: () => Promise<Article[]> = () => {
+export const fetchAllArticles: (
+    sort_by: string,
+    order: string
+) => Promise<Article[]> = (sort_by = "created_at", order = "DESC") => {
+    const sortGreenList = [
+        "title",
+        "topic",
+        "author",
+        "body",
+        "created_at",
+        "votes",
+        "comment_count",
+    ];
+    const orderGreenList = ["ASC", "asc", "DESC", "desc"];
+
+    if (!checkIsValidQuery(sortGreenList, sort_by)) {
+        return Promise.reject({ status: 400, msg: "Invalid sort query" });
+    }
+    if (!checkIsValidQuery(orderGreenList, order)) {
+        return Promise.reject({ status: 400, msg: "Invalid order query" });
+    }
+
+    console.log(order, "*****");
+
     return db
         .query(
-            "SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id;"
+            `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`
         )
         .then((response: { rows: Article[] }) => {
             return response.rows;

@@ -23,12 +23,18 @@ export type Comment = Omit<Article, "topic" | "title" | "comment_count">;
 
 export const getAllArticles: express.RequestHandler<
     Request,
-    { articles: Article[] }
-> = (_req, res) => {
-    fetchAllArticles().then((articles) => {
-        const articleResults = articles;
-        res.status(200).send({ articles: articleResults });
-    });
+    { articles: Article[] },
+    {},
+    { sort_by: string; order: string }
+> = (req, res, next) => {
+    const { sort_by, order } = req.query;
+
+    fetchAllArticles(sort_by, order)
+        .then((articles) => {
+            const articleResults = articles;
+            res.status(200).send({ articles: articleResults });
+        })
+        .catch(next);
 };
 
 export const getArticleById: express.RequestHandler<
