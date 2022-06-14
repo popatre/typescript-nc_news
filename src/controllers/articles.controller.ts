@@ -25,11 +25,11 @@ export const getAllArticles: express.RequestHandler<
     Request,
     { articles: Article[] },
     {},
-    { sort_by: string; order: string }
+    { sort_by: string; order: string; topic: string }
 > = (req, res, next) => {
-    const { sort_by, order } = req.query;
+    const { sort_by, order, topic } = req.query;
 
-    fetchAllArticles(sort_by, order)
+    fetchAllArticles(sort_by, order, topic)
         .then((articles) => {
             const articleResults = articles;
             res.status(200).send({ articles: articleResults });

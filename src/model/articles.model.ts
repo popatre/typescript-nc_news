@@ -1,8 +1,54 @@
 import { Article, Comment } from "../controllers/articles.controller";
 import db from "../db/index";
-import { checkIsValidQuery } from "../utils/utils";
+import { checkIsValidQuery, getValidTopics } from "../utils/utils";
 
 export const fetchAllArticles: (
+    sort_by: string,
+    order: string,
+    topic: string
+) => Promise<Article[]> = (sort_by = "created_at", order = "DESC", topic) => {
+    const sortGreenList = [
+        "title",
+        "topic",
+        "author",
+        "body",
+        "created_at",
+        "votes",
+        "comment_count",
+    ];
+    const orderGreenList = ["ASC", "asc", "DESC", "desc"];
+
+    const validSort = checkIsValidQuery(sortGreenList, sort_by);
+    const validOrder = checkIsValidQuery(orderGreenList, order);
+    const validTopics = getValidTopics();
+
+    let queryStr = `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+    const filterArr: string[] = [];
+
+    return Promise.all([validTopics, validSort, validOrder])
+        .then(([greenListTopics]) => {
+            if (topic) {
+                if (!greenListTopics.includes(topic)) {
+                    return Promise.reject({
+                        status: 404,
+                        msg: "topic not found",
+                    });
+                } else {
+                    queryStr += `WHERE topic = $1 `;
+                    filterArr.push(topic);
+                }
+            }
+
+            queryStr += `GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+            return db.query(queryStr, filterArr);
+        })
+        .then((response: { rows: Article[] }) => {
+            return response.rows;
+        });
+};
+
+export const fetchAllArticlesAlt: (
     sort_by: string,
     order: string
 ) => Promise<Article[]> = (sort_by = "created_at", order = "DESC") => {

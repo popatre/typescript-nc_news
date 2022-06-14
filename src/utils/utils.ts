@@ -1,3 +1,5 @@
+import db from "../db/index";
+
 export const checkIsValidQuery = (
     greenList: string[],
     wordToCheck: string
@@ -7,4 +9,10 @@ export const checkIsValidQuery = (
     } else {
         return true;
     }
+};
+
+export const getValidTopics: () => Promise<string[]> = async () => {
+    const { rows } = await db.query(`SELECT slug from topics;`);
+    const topics = rows.map((topic: { slug: string }) => topic.slug);
+    return topics;
 };

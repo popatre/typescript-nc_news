@@ -50,7 +50,7 @@ describe("GET /articles", () => {
                 expect(body.articles[0].article_id).to.eql(1);
             });
     });
-    it.only("status 400: bad sort_by query value", () => {
+    it("status 400: bad sort_by query value", () => {
         return request(app)
             .get("/api/articles?sort_by=badSortBy")
             .expect(400)
@@ -74,6 +74,32 @@ describe("GET /articles", () => {
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).to.eql("Invalid query");
+            });
+    });
+    it.only("status 200: allows filter by topic", () => {
+        return request(app)
+            .get("/api/articles?topic=cats")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(1);
+            });
+    });
+    it.only("status 404: topic not found", () => {
+        return request(app)
+            .get("/api/articles?topic=notATopic")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("topic not found");
+            });
+    });
+    it.only("status 200: returns empty array when filter by topic with no articles", () => {
+        return request(app)
+            .get("/api/articles?topic=paper")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(0);
             });
     });
     it("status 404 - general route not found", () => {
