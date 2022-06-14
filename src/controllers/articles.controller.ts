@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    addCommentByArticleId,
     addNewVoteByArticleId,
     fetchAllArticles,
     fetchArticleById,
@@ -58,7 +59,14 @@ export const patchNewVote: express.RequestHandler<
 
 export const postCommentByArticleId: express.RequestHandler<
     { article_id: string },
-    { comment: Comment }
+    { comment: Comment },
+    { username: string; body: string }
 > = (req, res, next) => {
     const { article_id } = req.params;
+    const { username, body } = req.body;
+    addCommentByArticleId(article_id, body, username)
+        .then((comment) => {
+            res.status(201).send({ comment });
+        })
+        .catch(next);
 };

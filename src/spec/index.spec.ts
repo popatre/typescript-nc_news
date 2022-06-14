@@ -254,7 +254,7 @@ describe("DELETE /api/comments/:comment_id", () => {
     });
 });
 
-describe("POST /api/articles/:article_id/comments", () => {
+describe.only("POST /api/articles/:article_id/comments", () => {
     it("status 201: posts comment to article, returning new post", () => {
         const postObj = { username: "rogersop", body: "Test body" };
         return request(app)

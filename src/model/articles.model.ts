@@ -1,4 +1,4 @@
-import { Article } from "../controllers/articles.controller";
+import { Article, Comment } from "../controllers/articles.controller";
 import db from "../db/index";
 
 export const fetchAllArticles: () => Promise<Article[]> = () => {
@@ -50,6 +50,21 @@ export const addNewVoteByArticleId: (
                     msg: "Article not found",
                 });
             }
+            return rows[0];
+        });
+};
+
+export const addCommentByArticleId: (
+    article_id: string,
+    username: string,
+    body: string
+) => Promise<Comment> = (articleId, body, username) => {
+    return db
+        .query(
+            `INSERT INTO comments(body, author, article_id) VALUES ($1, $2, $3) RETURNING *`,
+            [body, username, articleId]
+        )
+        .then(({ rows }: { rows: Comment[] }) => {
             return rows[0];
         });
 };
