@@ -26,6 +26,7 @@ export const fetchAllArticles: (
     const filterArr: string[] = [];
 
     return Promise.all([validTopics, validSort, validOrder])
+
         .then(([greenListTopics]) => {
             if (topic) {
                 if (!greenListTopics.includes(topic)) {
@@ -48,10 +49,15 @@ export const fetchAllArticles: (
         });
 };
 
+/**
+ *
+ * With promise.all in controller */
+
 export const fetchAllArticlesAlt: (
     sort_by: string,
-    order: string
-) => Promise<Article[]> = (sort_by = "created_at", order = "DESC") => {
+    order: string,
+    topic: string
+) => Promise<Article[]> = (sort_by = "created_at", order = "DESC", topic) => {
     const sortGreenList = [
         "title",
         "topic",
@@ -65,16 +71,30 @@ export const fetchAllArticlesAlt: (
 
     const validSort = checkIsValidQuery(sortGreenList, sort_by);
     const validOrder = checkIsValidQuery(orderGreenList, order);
+
+    let queryStr = `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+
+    const filterArr: string[] = [];
+
     return Promise.all([validSort, validOrder])
         .then(() => {
-            return db.query(
-                `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`
-            );
+            if (topic) {
+                queryStr += `WHERE topic = $1`;
+                filterArr.push(topic);
+            }
+
+            queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+
+            return db.query(queryStr, filterArr);
         })
         .then((response: { rows: Article[] }) => {
             return response.rows;
         });
 };
+
+/**
+ *
+ * With promise.all in controller */
 
 export const fetchArticleById: (article_id: number) => Promise<Article> = (
     article_id

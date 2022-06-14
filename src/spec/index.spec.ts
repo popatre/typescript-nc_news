@@ -76,7 +76,7 @@ describe("GET /articles", () => {
                 expect(body.msg).to.eql("Invalid query");
             });
     });
-    it.only("status 200: allows filter by topic", () => {
+    it("status 200: allows filter by topic", () => {
         return request(app)
             .get("/api/articles?topic=cats")
             .expect(200)
@@ -85,7 +85,7 @@ describe("GET /articles", () => {
                 expect(body.articles).to.have.lengthOf(1);
             });
     });
-    it.only("status 404: topic not found", () => {
+    it("status 404: topic not found", () => {
         return request(app)
             .get("/api/articles?topic=notATopic")
             .expect(404)
@@ -93,7 +93,7 @@ describe("GET /articles", () => {
                 expect(body.msg).to.eql("topic not found");
             });
     });
-    it.only("status 200: returns empty array when filter by topic with no articles", () => {
+    it("status 200: returns empty array when filter by topic with no articles", () => {
         return request(app)
             .get("/api/articles?topic=paper")
             .expect(200)

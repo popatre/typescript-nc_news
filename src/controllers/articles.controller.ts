@@ -3,10 +3,12 @@ import {
     addCommentByArticleId,
     addNewVoteByArticleId,
     fetchAllArticles,
+    fetchAllArticlesAlt,
     fetchArticleById,
     fetchCommentsById,
 } from "../model/articles.model";
 import { Request, Response } from "express";
+import { checkIfExists } from "../utils/utils";
 
 export type Article = {
     title: string;
@@ -29,10 +31,32 @@ export const getAllArticles: express.RequestHandler<
 > = (req, res, next) => {
     const { sort_by, order, topic } = req.query;
 
-    fetchAllArticles(sort_by, order, topic)
-        .then((articles) => {
-            const articleResults = articles;
-            res.status(200).send({ articles: articleResults });
+    // fetchAllArticles(sort_by, order, topic)
+    //     .then((articles) => {
+    //         const articleResults = articles;
+    //         res.status(200).send({ articles: articleResults });
+    //     })
+    //     .catch(next);
+
+    const promiseArr = [];
+
+    const allArticles = fetchAllArticlesAlt(sort_by, order, topic);
+
+    const checkTopicExists = checkIfExists(
+        "topics",
+        "slug",
+        topic,
+        "topic not found"
+    );
+    if (topic) {
+        promiseArr.push(allArticles, checkTopicExists);
+    } else {
+        promiseArr.push(allArticles);
+    }
+
+    return Promise.all(promiseArr)
+        .then(([articles]) => {
+            res.status(200).send({ articles });
         })
         .catch(next);
 };
