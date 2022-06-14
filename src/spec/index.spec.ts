@@ -55,7 +55,7 @@ describe("GET /articles", () => {
             .get("/api/articles?sort_by=badSortBy")
             .expect(400)
             .then(({ body }) => {
-                expect(body.msg).to.eql("Invalid sort query");
+                expect(body.msg).to.eql("Invalid query");
             });
     });
     it("status 200: orders by order query", () => {
@@ -73,7 +73,7 @@ describe("GET /articles", () => {
             .get("/api/articles?order=invalid")
             .expect(400)
             .then(({ body }) => {
-                expect(body.msg).to.eql("Invalid order query");
+                expect(body.msg).to.eql("Invalid query");
             });
     });
     it("status 404 - general route not found", () => {

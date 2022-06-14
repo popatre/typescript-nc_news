@@ -17,19 +17,14 @@ export const fetchAllArticles: (
     ];
     const orderGreenList = ["ASC", "asc", "DESC", "desc"];
 
-    if (!checkIsValidQuery(sortGreenList, sort_by)) {
-        return Promise.reject({ status: 400, msg: "Invalid sort query" });
-    }
-    if (!checkIsValidQuery(orderGreenList, order)) {
-        return Promise.reject({ status: 400, msg: "Invalid order query" });
-    }
-
-    console.log(order, "*****");
-
-    return db
-        .query(
-            `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`
-        )
+    const validSort = checkIsValidQuery(sortGreenList, sort_by);
+    const validOrder = checkIsValidQuery(orderGreenList, order);
+    return Promise.all([validSort, validOrder])
+        .then(() => {
+            return db.query(
+                `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`
+            );
+        })
         .then((response: { rows: Article[] }) => {
             return response.rows;
         });
