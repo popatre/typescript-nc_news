@@ -11,7 +11,7 @@ export const fetchAllArticles: () => Promise<Article[]> = () => {
         });
 };
 
-export const fetchArticleById: (article_id: string) => Promise<Article> = (
+export const fetchArticleById: (article_id: number) => Promise<Article> = (
     article_id
 ) => {
     return db
@@ -80,11 +80,37 @@ export const addCommentByArticleId: (
         });
 };
 
+/* Method without promise.all */
+
+// export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
+//     articleId
+// ) => {
+//     return db
+//         .query(`SELECT * FROM articles WHERE article_id = $1`, [articleId])
+//         .then(({ rows }: { rows: [] }) => {
+//             if (!rows.length) {
+//                 return Promise.reject({
+//                     status: 404,
+//                     msg: "Article not found",
+//                 });
+//             } else {
+//                 return db.query(
+//                     `SELECT * from comments WHERE article_id = $1`,
+//                     [articleId]
+//                 );
+//             }
+//         })
+//         .then(({ rows }: { rows: Comment[] }) => {
+//             return rows;
+//         });
+// };
+
 export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
     articleId
 ) => {
     return db
         .query(`SELECT * from comments WHERE article_id = $1`, [articleId])
+
         .then(({ rows }: { rows: Comment[] }) => {
             return rows;
         });

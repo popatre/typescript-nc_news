@@ -32,7 +32,7 @@ export const getAllArticles: express.RequestHandler<
 };
 
 export const getArticleById: express.RequestHandler<
-    { article_id: string },
+    { article_id: number },
     { article: Article }
 > = (req, res, next) => {
     const { article_id } = req.params;
@@ -77,7 +77,12 @@ export const getCommentsById: express.RequestHandler<
     { comments: Comment[] }
 > = (req, res, next) => {
     const { article_id } = req.params;
-    fetchCommentsById(article_id).then((comments) => {
-        res.status(200).send({ comments });
-    });
+
+    const checkArticleIdExists = fetchArticleById(article_id);
+
+    Promise.all([checkArticleIdExists, fetchCommentsById(article_id)])
+        .then(([_article, comments]) => {
+            res.status(200).send({ comments });
+        })
+        .catch(next);
 };

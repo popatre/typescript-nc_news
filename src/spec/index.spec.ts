@@ -336,4 +336,28 @@ describe.only("GET  /api/articles/:article_id/comments", () => {
                 });
             });
     });
+    it("status 404: article id not found for valid Id", () => {
+        return request(app)
+            .get("/api/articles/99999/comments")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Article not found");
+            });
+    });
+    it("status 400: article id not found", () => {
+        return request(app)
+            .get("/api/articles/badIdHere/comments")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+    it("status 200: returns empty array when article id has no comments", () => {
+        return request(app)
+            .get("/api/articles/2/comments")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments).to.deep.equal([]);
+            });
+    });
 });
