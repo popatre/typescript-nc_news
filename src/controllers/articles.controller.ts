@@ -122,7 +122,9 @@ export const deleteArticleById: express.RequestHandler<{
     article_id: number;
 }> = (req, res, next) => {
     const { article_id } = req.params;
-    removeArticleById(article_id).then(() => {
-        res.sendStatus(204);
-    });
+    removeArticleById(article_id)
+        .then(() => {
+            res.sendStatus(204);
+        })
+        .catch(next);
 };

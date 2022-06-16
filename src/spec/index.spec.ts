@@ -446,4 +446,20 @@ describe.only("DELETE /api/articles/:article_id", () => {
                 expect(body.articles).to.have.lengthOf(11);
             });
     });
+    it("status 404: delete article with no existent id", () => {
+        return request(app)
+            .delete("/api/articles/9999999")
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Article id not found");
+            });
+    });
+    it("status 400: delete article with no existent id", () => {
+        return request(app)
+            .delete("/api/articles/notANumber")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
 });

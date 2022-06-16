@@ -204,5 +204,17 @@ export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
 export const removeArticleById: (articleId: number) => Promise<void> = (
     articleId: number
 ) => {
-    return db.query(`DELETE FROM articles WHERE article_id = $1`, [articleId]);
+    return db
+        .query(`SELECT * FROM articles WHERE article_id = $1`, [articleId])
+        .then(({ rows }: { rows: [] }) => {
+            if (!rows.length) {
+                return Promise.reject({
+                    status: 404,
+                    msg: "Article id not found",
+                });
+            }
+            return db.query(`DELETE FROM articles WHERE article_id = $1`, [
+                articleId,
+            ]);
+        });
 };
