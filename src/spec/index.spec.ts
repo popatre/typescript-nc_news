@@ -433,3 +433,17 @@ describe("GET  /api/articles/:article_id/comments", () => {
             });
     });
 });
+
+describe.only("DELETE /api/articles/:article_id", () => {
+    it("status 204: deleted article by id requested", () => {
+        return request(app)
+            .delete("/api/articles/1")
+            .expect(204)
+            .then(() => {
+                return request(app).get("/api/articles").expect(200);
+            })
+            .then(({ body }) => {
+                expect(body.articles).to.have.lengthOf(11);
+            });
+    });
+});

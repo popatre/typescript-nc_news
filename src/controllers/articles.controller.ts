@@ -6,6 +6,7 @@ import {
     fetchAllArticlesAlt,
     fetchArticleById,
     fetchCommentsById,
+    removeArticleById,
 } from "../model/articles.model";
 import { Request, Response } from "express";
 import { checkIfExists } from "../utils/utils";
@@ -115,4 +116,13 @@ export const getCommentsById: express.RequestHandler<
             res.status(200).send({ comments });
         })
         .catch(next);
+};
+
+export const deleteArticleById: express.RequestHandler<{
+    article_id: number;
+}> = (req, res, next) => {
+    const { article_id } = req.params;
+    removeArticleById(article_id).then(() => {
+        res.sendStatus(204);
+    });
 };

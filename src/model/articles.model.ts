@@ -200,3 +200,9 @@ export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
             return rows;
         });
 };
+
+export const removeArticleById: (articleId: number) => Promise<void> = (
+    articleId: number
+) => {
+    return db.query(`DELETE FROM articles WHERE article_id = $1`, [articleId]);
+};
