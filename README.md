@@ -52,12 +52,21 @@ To set up your own repository, please follow the instructions below
 -   express
 -   pg
 -   pg-format
+-   cors
 
-**Developer dependencies for testing:**
+**Developer dependencies:**
 
--   jest
--   supertest
--   jest-sorted
+-   @types/chai
+-   @types/express
+-   @types/mocha
+-   @types/node
+-   @types/pg-format
+-   @types/supertest
+-   chai v.4.3.6
+-   supertest v.6.1.6
+-   ts-mocha v.10.0.0
+-   ts-node v.10.8.1
+-   typescript
 
 <br>
 
