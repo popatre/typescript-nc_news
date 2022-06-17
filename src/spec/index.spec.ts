@@ -550,7 +550,7 @@ describe("POST /api/articles", () => {
     });
 });
 
-describe.only(" POST /api/topics", () => {
+describe(" POST /api/topics", () => {
     it("status 200 - adds new topics - responds with new topic", () => {
         const topicObj = {
             slug: "New topic",
@@ -589,6 +589,27 @@ describe.only(" POST /api/topics", () => {
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).to.eql("Bad request");
+            });
+    });
+});
+
+describe.only("PATCH /api/comments/:comment_id", () => {
+    it("status 200 - updates comment votes for selected comment id", () => {
+        const commentObj = { inc_votes: 1 };
+        return request(app)
+            .patch("/api/comments/1")
+            .send(commentObj)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comment).to.include.all.keys(
+                    "body",
+                    "votes",
+                    "author",
+                    "article_id",
+                    "created_at",
+                    "comment_id"
+                );
+                expect(body.comment.comment_id).to.eql(1);
             });
     });
 });

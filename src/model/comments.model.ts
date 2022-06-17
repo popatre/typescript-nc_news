@@ -1,3 +1,4 @@
+import { Comment } from "../controllers/comments.controller";
 import db from "../db/index";
 
 export const removeCommentById: (comment_id: string) => Promise<void> = (
@@ -13,5 +14,19 @@ export const removeCommentById: (comment_id: string) => Promise<void> = (
                     commentId,
                 ]);
             }
+        });
+};
+
+export const updateNewCommentVotes: (
+    commentId: number,
+    voteNumber: number
+) => Promise<Comment> = (commentId, voteNumber) => {
+    return db
+        .query(
+            `UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *`,
+            [voteNumber, commentId]
+        )
+        .then(({ rows }: { rows: Comment[] }) => {
+            return rows[0];
         });
 };
