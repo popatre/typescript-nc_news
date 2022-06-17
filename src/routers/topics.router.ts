@@ -1,8 +1,8 @@
 import express from "express";
-import { getAllTopics } from "../controllers/topics.controller";
+import { getAllTopics, postNewTopic } from "../controllers/topics.controller";
 
 const topicsRouter = express.Router();
 
-topicsRouter.route("/").get(getAllTopics);
+topicsRouter.route("/").get(getAllTopics).post(postNewTopic);
 
 export default topicsRouter;

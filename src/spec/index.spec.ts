@@ -504,7 +504,7 @@ describe("POST /api/articles", () => {
             .post("/api/articles")
             .send(postObj)
             .expect(404)
-            .expect(({ body }) => {
+            .then(({ body }) => {
                 expect(body.msg).to.eql("Username not found");
             });
     });
@@ -519,7 +519,7 @@ describe("POST /api/articles", () => {
             .post("/api/articles")
             .send(postObj)
             .expect(404)
-            .expect(({ body }) => {
+            .then(({ body }) => {
                 expect(body.msg).to.eql("Topic not found");
             });
     });
@@ -534,7 +534,7 @@ describe("POST /api/articles", () => {
             .post("/api/articles")
             .send(postObj)
             .expect(400)
-            .expect(({ body }) => {
+            .then(({ body }) => {
                 expect(body.msg).to.eql("Bad request");
             });
     });
@@ -544,8 +544,28 @@ describe("POST /api/articles", () => {
             .post("/api/articles")
             .send(postObj)
             .expect(400)
-            .expect(({ body }) => {
+            .then(({ body }) => {
                 expect(body.msg).to.eql("Bad request");
+            });
+    });
+});
+
+describe.only(" POST /api/topics", () => {
+    it("status 200 - adds new topics - responds with new topic", () => {
+        const topicObj = {
+            slug: "New topic",
+            description: "Its a new topic",
+        };
+        return request(app)
+            .post("/api/topics")
+            .send(topicObj)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.topic).to.deep.equal(topicObj);
+                return request(app).get("/api/topics").expect(200);
+            })
+            .then(({ body }) => {
+                expect(body.topics).to.have.lengthOf(4);
             });
     });
 });
