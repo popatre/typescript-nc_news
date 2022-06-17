@@ -464,8 +464,8 @@ describe("DELETE /api/articles/:article_id", () => {
     });
 });
 
-describe.only("POST /api/articles", () => {
-    it.only("status 201: posts new article to correct topic", () => {
+describe("POST /api/articles", () => {
+    it("status 201: posts new article to correct topic", () => {
         const postObj = {
             author: "rogersop",
             title: "New post",
@@ -487,6 +487,10 @@ describe.only("POST /api/articles", () => {
                     "created_at",
                     "comment_count"
                 );
+                expect(body.article.author).to.eql("rogersop");
+                expect(body.article.title).to.eql("New post");
+                expect(body.article.body).to.eql("New post body");
+                expect(body.article.topic).to.eql("cats");
             });
     });
     it("status 404 - username not found", () => {
@@ -502,6 +506,21 @@ describe.only("POST /api/articles", () => {
             .expect(404)
             .expect(({ body }) => {
                 expect(body.msg).to.eql("Username not found");
+            });
+    });
+    it("status 404 - topic not found", () => {
+        const postObj = {
+            author: "rogersop",
+            title: "New post",
+            body: "New post body",
+            topic: "notATopic",
+        };
+        return request(app)
+            .post("/api/articles")
+            .send(postObj)
+            .expect(404)
+            .expect(({ body }) => {
+                expect(body.msg).to.eql("Topic not found");
             });
     });
     it("status 400 - wrong data type on a key", () => {

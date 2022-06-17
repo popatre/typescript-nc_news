@@ -141,7 +141,25 @@ export const postNewArticle: express.RequestHandler<
     }
 > = (req, res, next) => {
     const { author, title, body, topic } = req.body;
-    addNewArticle(author, title, body, topic).then((article) => {
-        res.status(201).send({ article });
-    });
+
+    const isValidUsername = checkIfExists(
+        "users",
+        "username",
+        author,
+        "Username not found"
+    );
+    const isValidTopic = checkIfExists(
+        "topics",
+        "slug",
+        topic,
+        "Topic not found"
+    );
+
+    const addArticle = addNewArticle(author, title, body, topic);
+
+    Promise.all([addArticle, isValidUsername, isValidTopic])
+        .then(([article]) => {
+            res.status(201).send({ article });
+        })
+        .catch(next);
 };

@@ -225,6 +225,14 @@ export const addNewArticle: (
     body: string,
     topic: string
 ) => Promise<Article> = (author, title, body, topic) => {
+    if (
+        typeof author !== "string" ||
+        typeof title !== "string" ||
+        typeof body !== "string" ||
+        typeof topic !== "string"
+    ) {
+        return Promise.reject({ status: 400, msg: "Bad request" });
+    }
     return db
         .query(
             `INSERT INTO articles(author, title, body, topic) VALUES($1, $2, $3, $4) RETURNING *`,
