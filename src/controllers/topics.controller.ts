@@ -21,7 +21,9 @@ export const postNewTopic: express.RequestHandler<
     { description: string; slug: string }
 > = (req, res, next) => {
     const { description, slug } = req.body;
-    addNewTopic(description, slug).then((topic) => {
-        res.status(201).send({ topic });
-    });
+    addNewTopic(description, slug)
+        .then((topic) => {
+            res.status(201).send({ topic });
+        })
+        .catch(next);
 };

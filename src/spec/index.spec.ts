@@ -568,4 +568,27 @@ describe.only(" POST /api/topics", () => {
                 expect(body.topics).to.have.lengthOf(4);
             });
     });
+    it("status 400 - wrong data type on object", () => {
+        const topicObj = {
+            slug: 99999,
+            description: "Its a new topic",
+        };
+        return request(app)
+            .post("/api/topics")
+            .send(topicObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+    it("status 400 - missing keys on post object", () => {
+        const topicObj = {};
+        return request(app)
+            .post("/api/topics")
+            .send(topicObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
 });
