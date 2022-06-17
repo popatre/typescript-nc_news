@@ -1,6 +1,7 @@
 import express from "express";
 import {
     addCommentByArticleId,
+    addNewArticle,
     addNewVoteByArticleId,
     fetchAllArticles,
     fetchAllArticlesAlt,
@@ -127,4 +128,20 @@ export const deleteArticleById: express.RequestHandler<{
             res.sendStatus(204);
         })
         .catch(next);
+};
+
+export const postNewArticle: express.RequestHandler<
+    {},
+    { article: Article },
+    {
+        author: string;
+        title: string;
+        body: string;
+        topic: string;
+    }
+> = (req, res, next) => {
+    const { author, title, body, topic } = req.body;
+    addNewArticle(author, title, body, topic).then((article) => {
+        res.status(201).send({ article });
+    });
 };

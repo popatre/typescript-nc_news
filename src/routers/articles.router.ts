@@ -6,11 +6,12 @@ import {
     getCommentsById,
     patchNewVote,
     postCommentByArticleId,
+    postNewArticle,
 } from "../controllers/articles.controller";
 
 const articlesRouter = express.Router();
 
-articlesRouter.route("/").get(getAllArticles);
+articlesRouter.route("/").get(getAllArticles).post(postNewArticle);
 articlesRouter
     .route("/:article_id")
     .get(getArticleById)

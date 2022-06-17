@@ -434,7 +434,7 @@ describe("GET  /api/articles/:article_id/comments", () => {
     });
 });
 
-describe.only("DELETE /api/articles/:article_id", () => {
+describe("DELETE /api/articles/:article_id", () => {
     it("status 204: deleted article by id requested", () => {
         return request(app)
             .delete("/api/articles/1")
@@ -459,6 +459,73 @@ describe.only("DELETE /api/articles/:article_id", () => {
             .delete("/api/articles/notANumber")
             .expect(400)
             .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+});
+
+describe.only("POST /api/articles", () => {
+    it.only("status 201: posts new article to correct topic", () => {
+        const postObj = {
+            author: "rogersop",
+            title: "New post",
+            body: "New post body",
+            topic: "cats",
+        };
+        return request(app)
+            .post("/api/articles")
+            .send(postObj)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.article).to.include.all.keys(
+                    "author",
+                    "title",
+                    "body",
+                    "topic",
+                    "article_id",
+                    "votes",
+                    "created_at",
+                    "comment_count"
+                );
+            });
+    });
+    it("status 404 - username not found", () => {
+        const postObj = {
+            author: "notAUsername",
+            title: "New post",
+            body: "New post body",
+            topic: "cats",
+        };
+        return request(app)
+            .post("/api/articles")
+            .send(postObj)
+            .expect(404)
+            .expect(({ body }) => {
+                expect(body.msg).to.eql("Username not found");
+            });
+    });
+    it("status 400 - wrong data type on a key", () => {
+        const postObj = {
+            author: "rogersop",
+            title: 999,
+            body: "New post body",
+            topic: "cats",
+        };
+        return request(app)
+            .post("/api/articles")
+            .send(postObj)
+            .expect(400)
+            .expect(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+    it("status 400 - missing keys on post body", () => {
+        const postObj = {};
+        return request(app)
+            .post("/api/articles")
+            .send(postObj)
+            .expect(400)
+            .expect(({ body }) => {
                 expect(body.msg).to.eql("Bad request");
             });
     });

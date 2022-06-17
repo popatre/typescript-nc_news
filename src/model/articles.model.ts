@@ -218,3 +218,20 @@ export const removeArticleById: (articleId: number) => Promise<void> = (
             ]);
         });
 };
+
+export const addNewArticle: (
+    author: string,
+    title: string,
+    body: string,
+    topic: string
+) => Promise<Article> = (author, title, body, topic) => {
+    return db
+        .query(
+            `INSERT INTO articles(author, title, body, topic) VALUES($1, $2, $3, $4) RETURNING *`,
+            [author, title, body, topic]
+        )
+        .then(({ rows }: { rows: Article[] }) => {
+            rows[0].comment_count = 0;
+            return rows[0];
+        });
+};
