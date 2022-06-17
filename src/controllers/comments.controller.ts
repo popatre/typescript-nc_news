@@ -31,7 +31,9 @@ export const patchNewCommentVotes: express.RequestHandler<
 > = (req, res, next) => {
     const { inc_votes } = req.body;
     const { comment_id } = req.params;
-    updateNewCommentVotes(comment_id, inc_votes).then((comment) => {
-        res.status(200).send({ comment });
-    });
+    updateNewCommentVotes(comment_id, inc_votes)
+        .then((comment) => {
+            res.status(200).send({ comment });
+        })
+        .catch(next);
 };

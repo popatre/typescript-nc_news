@@ -593,7 +593,7 @@ describe(" POST /api/topics", () => {
     });
 });
 
-describe.only("PATCH /api/comments/:comment_id", () => {
+describe("PATCH /api/comments/:comment_id", () => {
     it("status 200 - updates comment votes for selected comment id", () => {
         const commentObj = { inc_votes: 1 };
         return request(app)
@@ -610,6 +610,46 @@ describe.only("PATCH /api/comments/:comment_id", () => {
                     "comment_id"
                 );
                 expect(body.comment.comment_id).to.eql(1);
+            });
+    });
+    it("status 404 - comment id not found", () => {
+        const commentObj = { inc_votes: 1 };
+        return request(app)
+            .patch("/api/comments/999999")
+            .send(commentObj)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Comment not found");
+            });
+    });
+    it("status 400 - bad data type in id", () => {
+        const commentObj = { inc_votes: 1 };
+        return request(app)
+            .patch("/api/comments/badCommentId")
+            .send(commentObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad request");
+            });
+    });
+    it("status 400 - bad data type in object body", () => {
+        const commentObj = { inc_votes: "badData" };
+        return request(app)
+            .patch("/api/comments/badCommentId")
+            .send(commentObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad data type and/or missing keys");
+            });
+    });
+    it("status 400 - missing keys in patch body", () => {
+        const commentObj = { inc: 1 };
+        return request(app)
+            .patch("/api/comments/badCommentId")
+            .send(commentObj)
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Bad data type and/or missing keys");
             });
     });
 });
