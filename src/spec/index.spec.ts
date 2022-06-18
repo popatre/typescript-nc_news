@@ -653,7 +653,7 @@ describe("PATCH /api/comments/:comment_id", () => {
             });
     });
 });
-describe.only("pagination", () => {
+describe("GET /api/articles pagination", () => {
     it("returns correct number of articles based on limit passed", () => {
         return request(app)
             .get("/api/articles?limit=5")
@@ -692,6 +692,50 @@ describe.only("pagination", () => {
     it("status 400 - non-number type passed as p query", () => {
         return request(app)
             .get("/api/articles?limit=5&p=notANumber")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Limit and/or p must be a number");
+            });
+    });
+});
+
+describe.only("GET /api/articles/:article_id/comments pagination", () => {
+    it("returns correct number of articles based on limit passed", () => {
+        return request(app)
+            .get("/api/articles/1/comments?limit=5")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments).to.have.lengthOf(5);
+            });
+    });
+    it("returns queries from page requested", () => {
+        return request(app)
+            .get("/api/articles/1/comments?limit=5&p=3")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.comments).to.have.lengthOf(1);
+            });
+    });
+    it("status 200 - returns empty array when passed query beyond amount of records", () => {
+        return request(app)
+            .get("/api/articles/1/comments?limit=5&p=99")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.comments);
+                expect(body.comments).to.have.lengthOf(0);
+            });
+    });
+    it("status 400 - non-number type passed as limit query", () => {
+        return request(app)
+            .get("/api/articles/1/comments?limit=notANumber&p=2")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Limit and/or p must be a number");
+            });
+    });
+    it("status 400 - non-number type passed as p query", () => {
+        return request(app)
+            .get("/api/articles/1/comments?limit=5&p=notANumber")
             .expect(400)
             .then(({ body }) => {
                 expect(body.msg).to.eql("Limit and/or p must be a number");

@@ -3,6 +3,7 @@ import {
     addCommentByArticleId,
     addNewArticle,
     addNewVoteByArticleId,
+    countArticles,
     fetchAllArticles,
     fetchAllArticlesAlt,
     fetchArticleById,
@@ -106,13 +107,16 @@ export const postCommentByArticleId: express.RequestHandler<
 
 export const getCommentsById: express.RequestHandler<
     { article_id: number },
-    { comments: Comment[] }
+    { comments: Comment[] },
+    {},
+    { limit: number; p: number }
 > = (req, res, next) => {
     const { article_id } = req.params;
+    const { limit, p } = req.query;
 
     const checkArticleIdExists = fetchArticleById(article_id);
 
-    Promise.all([checkArticleIdExists, fetchCommentsById(article_id)])
+    Promise.all([checkArticleIdExists, fetchCommentsById(article_id, limit, p)])
         .then(([_article, comments]) => {
             res.status(200).send({ comments });
         })

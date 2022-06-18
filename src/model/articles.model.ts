@@ -2,6 +2,25 @@ import { Article, Comment } from "../controllers/articles.controller";
 import db from "../db/index";
 import { checkIsValidQuery, getValidTopics } from "../utils/utils";
 
+export const countArticles: (topic: string) => Promise<number> = async (
+    topic
+) => {
+    let queryStr = `SELECT COUNT('*') FROM articles `;
+    const queryParams = [];
+
+    if (topic) {
+        queryStr += `WHERE articles.topic ILIKE $1`;
+        queryParams.push(topic);
+    }
+
+    const count = await db
+        .query(queryStr, queryParams)
+        .then((result: { rows: { count: number }[] }) =>
+            Number(result.rows[0].count)
+        );
+    return count;
+};
+
 export const fetchAllArticles: (
     sort_by: string,
     order: string,
@@ -216,11 +235,25 @@ export const addCommentByArticleId: (
 //         });
 // };
 
-export const fetchCommentsById: (articleId: number) => Promise<Comment[]> = (
-    articleId
-) => {
+export const fetchCommentsById: (
+    articleId: number,
+    limit: number,
+    p: number
+) => Promise<Comment[]> = (articleId, limit = 10, p = 1) => {
+    if (isNaN(limit) || isNaN(p)) {
+        return Promise.reject({
+            status: 400,
+            msg: "Limit and/or p must be a number",
+        });
+    }
+
+    const offset = (p - 1) * limit;
+
     return db
-        .query(`SELECT * from comments WHERE article_id = $1`, [articleId])
+        .query(
+            `SELECT * from comments WHERE article_id = $1 LIMIT ${limit} OFFSET ${offset}`,
+            [articleId]
+        )
 
         .then(({ rows }: { rows: Comment[] }) => {
             return rows;
