@@ -5,8 +5,16 @@ import { checkIsValidQuery, getValidTopics } from "../utils/utils";
 export const fetchAllArticles: (
     sort_by: string,
     order: string,
-    topic: string
-) => Promise<Article[]> = (sort_by = "created_at", order = "DESC", topic) => {
+    topic: string,
+    limit: number,
+    p: number
+) => Promise<Article[]> = (
+    sort_by = "created_at",
+    order = "DESC",
+    topic,
+    limit = 10,
+    p = 1
+) => {
     const sortGreenList = [
         "title",
         "topic",
@@ -56,8 +64,16 @@ export const fetchAllArticles: (
 export const fetchAllArticlesAlt: (
     sort_by: string,
     order: string,
-    topic: string
-) => Promise<Article[]> = (sort_by = "created_at", order = "DESC", topic) => {
+    topic: string,
+    limit: number,
+    p: number
+) => Promise<Article[]> = (
+    sort_by = "created_at",
+    order = "DESC",
+    topic,
+    limit = 12,
+    p = 1
+) => {
     const sortGreenList = [
         "title",
         "topic",
@@ -67,6 +83,16 @@ export const fetchAllArticlesAlt: (
         "votes",
         "comment_count",
     ];
+
+    if (isNaN(limit) || isNaN(p)) {
+        return Promise.reject({
+            status: 400,
+            msg: "Limit and/or p must be a number",
+        });
+    }
+
+    const offset = (+p - 1) * limit;
+
     const orderGreenList = ["ASC", "asc", "DESC", "desc"];
 
     const validSort = checkIsValidQuery(sortGreenList, sort_by);
@@ -83,7 +109,7 @@ export const fetchAllArticlesAlt: (
                 filterArr.push(topic);
             }
 
-            queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+            queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}`;
 
             return db.query(queryStr, filterArr);
         })

@@ -29,11 +29,11 @@ export const getAllArticles: express.RequestHandler<
     Request,
     { articles: Article[] },
     {},
-    { sort_by: string; order: string; topic: string }
+    { sort_by: string; order: string; topic: string; limit: number; p: number }
 > = (req, res, next) => {
-    const { sort_by, order, topic } = req.query;
+    const { sort_by, order, topic, limit, p } = req.query;
 
-    // fetchAllArticles(sort_by, order, topic)
+    // fetchAllArticles(sort_by, order, topic, limit, p)
     //     .then((articles) => {
     //         const articleResults = articles;
     //         res.status(200).send({ articles: articleResults });
@@ -42,7 +42,7 @@ export const getAllArticles: express.RequestHandler<
 
     const promiseArr = [];
 
-    const allArticles = fetchAllArticlesAlt(sort_by, order, topic);
+    const allArticles = fetchAllArticlesAlt(sort_by, order, topic, limit, p);
 
     const checkTopicExists = checkIfExists(
         "topics",

@@ -653,3 +653,48 @@ describe("PATCH /api/comments/:comment_id", () => {
             });
     });
 });
+describe.only("pagination", () => {
+    it("returns correct number of articles based on limit passed", () => {
+        return request(app)
+            .get("/api/articles?limit=5")
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles).to.have.lengthOf(5);
+            });
+    });
+    it("returns queries from page requested", () => {
+        return request(app)
+            .get("/api/articles?limit=5&p=3")
+            .expect(200)
+            .then(({ body }) => {
+                console.log(body.articles);
+                expect(body.articles).to.have.lengthOf(2);
+                expect(body.articles[0].article_id).to.eql(11);
+            });
+    });
+    it("status 200 - returns empty array when passed query beyond amount of records", () => {
+        return request(app)
+            .get("/api/articles?limit=5&p=99")
+            .expect(200)
+            .then(({ body }) => {
+                assert.isArray(body.articles);
+                expect(body.articles).to.have.lengthOf(0);
+            });
+    });
+    it("status 400 - non-number type passed as limit query", () => {
+        return request(app)
+            .get("/api/articles?limit=notANumber&p=2")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Limit and/or p must be a number");
+            });
+    });
+    it("status 400 - non-number type passed as p query", () => {
+        return request(app)
+            .get("/api/articles?limit=5&p=notANumber")
+            .expect(400)
+            .then(({ body }) => {
+                expect(body.msg).to.eql("Limit and/or p must be a number");
+            });
+    });
+});
