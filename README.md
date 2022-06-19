@@ -7,10 +7,10 @@ It contains data on users, articles, topics and comments, which are accessible v
 
 **Hosted version**
 
-The hosted version of the API can be found here: <https://jmg-nc-news.herokuapp.com/api>
+The hosted version of the API can be found here: <https://ts-nc-news.herokuapp.com/api>
 <br>
 
-A link the the github repository can be found here: <https://github.com/popatre/nc_news>
+A link the the github repository can be found here: <https://github.com/popatre/typescript-nc_news>
 
 <br>
 
@@ -80,7 +80,7 @@ To set up your own repository, please follow the instructions below
 
 7.  Create the databases by running the following command in your terminal:
 
-        npm run setup-dbs
+        $ npm run setup-dbs
 
 _The console should confirm the two databases have been created._
 
@@ -90,7 +90,7 @@ _If an error occurs, please ensure your have named/set up the .env files as stat
 
 8.  The development database can then be seeded by running the following command in the terminal:
 
-         npm run seed
+        $ npm run seed
 
     _The console should confirm that four tables have been inserted into. If an error occurs, please ensure you have created the databases prior to seeding_
 
@@ -98,7 +98,9 @@ _If an error occurs, please ensure your have named/set up the .env files as stat
 
 9.  To run the server locally, type the code below into your terminal. The terminal should confirm that it has started listening
 
-        npm start
+        $ tsc
+
+        $ npm start
 
 <br>
 
