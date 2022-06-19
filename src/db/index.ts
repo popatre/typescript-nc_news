@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-const ENV = process.env.NODE_ENV || "dev";
+const ENV = process.env.NODE_ENV || "dev" || process.env.DEV_DATABASE;
 
 const config =
     ENV === "production"
@@ -15,9 +15,9 @@ require("dotenv").config({
     path: `${__dirname}/../../.env.${ENV}`,
 });
 
-if (!process.env.PGDATABASE) {
-    process.env.PGDATABASE = process.env.DEV_DATABASE;
-}
+// if (!process.env.PGDATABASE) {
+//     process.env.PGDATABASE = process.env.DEV_DATABASE;
+// }
 //
 
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
