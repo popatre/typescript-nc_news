@@ -18,6 +18,7 @@ require("dotenv").config({
 if (!process.env.PGDATABASE) {
     process.env.PGDATABASE = process.env.DEV_DATABASE;
 }
+//
 
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
     throw new Error("PGDATABASE or DATABASE_URL not set");
