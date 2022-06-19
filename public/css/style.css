@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9f9;
+    line-height: 1.5;
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin-inline: auto;
+}
+
+h1,
+h2 {
+    text-align: center;
+}
+
+h3 {
+    text-decoration: underline;
+    color: #eb1c24;
+}
+
+.route dt {
+    font-weight: bold;
+}
+.route dd:first-of-type {
+    font-size: 1.125rem;
+}
+
+.route {
+    background-color: aliceblue;
+    padding: 2em;
+    margin-block: 3em;
+    box-shadow: 5px 10px 9px #888888;
+    border: 1px solid #eb1c24;
+    border-radius: 10px;
+    line-height: 2;
+}
+
+code {
+    font-size: 1rem;
+}
+
+header {
+    background-color: #eb1c24;
+    padding-block: 1em;
+    margin-bottom: 1.5em;
+    color: white;
+}

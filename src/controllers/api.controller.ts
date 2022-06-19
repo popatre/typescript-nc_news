@@ -1,9 +1,8 @@
 import express from "express";
 import endpoints = require("../endpoints.json");
 
-export const getAllEndpoints: express.RequestHandler<{}, { routes: {} }> = (
-    req,
-    res
-) => {
-    res.status(200).send({ routes: endpoints });
+export const getAllEndpoints: express.RequestHandler<{}> = (req, res) => {
+    // res.status(200).send({ routes: endpoints });
+
+    res.render("index");
 };
