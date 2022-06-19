@@ -27,7 +27,7 @@ export type Article = {
 export type Comment = Omit<Article, "topic" | "title" | "comment_count">;
 
 export const getAllArticles: express.RequestHandler<
-    Request,
+    {},
     { articles: Article[] },
     {},
     { sort_by: string; order: string; topic: string; limit: number; p: number }
@@ -45,13 +45,13 @@ export const getAllArticles: express.RequestHandler<
 
     const allArticles = fetchAllArticlesAlt(sort_by, order, topic, limit, p);
 
-    const checkTopicExists = checkIfExists(
-        "topics",
-        "slug",
-        topic,
-        "topic not found"
-    );
     if (topic) {
+        const checkTopicExists = checkIfExists(
+            "topics",
+            "slug",
+            topic,
+            "topic not found"
+        );
         promiseArr.push(allArticles, checkTopicExists);
     } else {
         promiseArr.push(allArticles);
@@ -61,7 +61,10 @@ export const getAllArticles: express.RequestHandler<
         .then(([articles]) => {
             res.status(200).send({ articles });
         })
-        .catch(next);
+        .catch((err) => {
+            console.log(err);
+            next(err);
+        });
 };
 
 export const getArticleById: express.RequestHandler<

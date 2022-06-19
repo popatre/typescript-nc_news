@@ -117,18 +117,22 @@ export const fetchAllArticlesAlt: (
     const validSort = checkIsValidQuery(sortGreenList, sort_by);
     const validOrder = checkIsValidQuery(orderGreenList, order);
 
-    let queryStr = `SELECT articles.*, COUNT(comments.article_id)::int AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id `;
+    let queryStr = `SELECT articles.*, COUNT (comments.article_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments
+    ON articles.article_id = comments.article_id `;
 
     const filterArr: string[] = [];
 
     return Promise.all([validSort, validOrder])
         .then(() => {
             if (topic) {
-                queryStr += `WHERE topic = $1`;
+                queryStr += `WHERE topic = $1 `;
                 filterArr.push(topic);
             }
 
-            queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}`;
+            queryStr += `GROUP BY articles.article_id 
+            ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}  `;
 
             return db.query(queryStr, filterArr);
         })

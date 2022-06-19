@@ -699,7 +699,7 @@ describe("GET /api/articles pagination", () => {
     });
 });
 
-describe.only("GET /api/articles/:article_id/comments pagination", () => {
+describe("GET /api/articles/:article_id/comments pagination", () => {
     it("returns correct number of articles based on limit passed", () => {
         return request(app)
             .get("/api/articles/1/comments?limit=5")
