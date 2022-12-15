@@ -2,14 +2,14 @@
     "name": "be-nc-news",
     "version": "1.0.0",
     "description": "bc-nc-news",
-    "main": "index.js",
+    "main": "listen.js",
     "scripts": {
         "start": "node dist/listen.js",
         "setup-dbs": "psql -f ./src/db/setup.sql",
         "postinstall": "tsc",
         "seed": "tsc && node dist/db/seeds/run-seed.js",
         "test": "ts-mocha --timeout 5000 ./src/**/*.spec.ts",
-        "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed"
+        "seed-prod": "NODE_ENV=production  npm run seed"
     },
     "repository": {
         "type": "git",
