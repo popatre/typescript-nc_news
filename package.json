@@ -2,7 +2,7 @@
     "name": "be-nc-news",
     "version": "1.0.0",
     "description": "bc-nc-news",
-    "main": "dist/listen.js",
+    "main": "listen.js",
     "scripts": {
         "start": "node dist/listen.js",
         "setup-dbs": "psql -f ./src/db/setup.sql",
