@@ -7,7 +7,7 @@ It contains data on users, articles, topics and comments, which are accessible v
 
 **Hosted version**
 
-The hosted version of the API can be found here: <https://ts-nc-news.herokuapp.com/api>
+The hosted version of the API can be found here: <https://nc-news-ts.onrender.com/api>
 <br>
 
 A link the the github repository can be found here: <https://github.com/popatre/typescript-nc_news>
@@ -28,11 +28,11 @@ To set up your own repository, please follow the instructions below
 
 1.  Copy the code and paste into your terminal, in the usual directory for your projects
 
-        git clone https://github.com/popatre/nc_news.git
+        git clone https://github.com/popatre/typescript-nc_news
 
 2.  Once it has been successfully cloned, type the following code and press enter, in order to access the directory.
 
-        cd nc_news
+        cd typescript_nc_news
 
 3.  From here, you can open the directory in your source-code editor of choice e.g. visual-studio, atom etc.
 
