@@ -3,36 +3,34 @@ export const userData = [
         username: "tickle122",
         name: "Tom Tickle",
         avatar_url:
-            "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953",
+            "https://media.wired.com/photos/599cbdf191885f7b084d37f7/125:94/w_1374,h_1033,c_limit/Robot-Video.jpg",
     },
     {
         username: "grumpy19",
         name: "Paul Grump",
         avatar_url:
-            "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-er4OKHxB_Mm7BK59BFUoV2kGixf3wLRLgw&usqp=CAU",
     },
     {
         username: "happyamy2016",
         name: "Amy Happy",
         avatar_url:
-            "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729",
+            "https://static.bandainamcoent.eu/high/dark-souls/brand-setup/ds3_thumb_brand_624x468.jpg",
     },
     {
         username: "cooljmessy",
         name: "Peter Messy",
-        avatar_url:
-            "https://vignette.wikia.nocookie.net/mrmen/images/1/1a/MR_MESSY_4A.jpg/revision/latest/scale-to-width-down/250?cb=20170730171002",
+        avatar_url: "https://wallpaperaccess.com/full/52447.jpg",
     },
     {
         username: "weegembump",
         name: "Gemma Bump",
-        avatar_url:
-            "https://vignette.wikia.nocookie.net/mrmen/images/7/7e/MrMen-Bump.png/revision/latest?cb=20180123225553",
+        avatar_url: "https://wallpaperaccess.com/full/154009.jpg",
     },
     {
         username: "jessjelly",
         name: "Jess Jelly",
         avatar_url:
-            "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
+            "https://images.pexels.com/photos/1097456/pexels-photo-1097456.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
     },
 ];
